@@ -1,0 +1,48 @@
+.portfolio-pic {
+    width: 100px;
+}
+
+.edit-pic {
+    width: 70%;
+}
+
+.edit-pic form {
+    width: 80%;
+}
+
+form .btn {
+    margin: 2px;
+}
+
+.center-pic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-group-element {
+    margin-bottom: 2px;
+}
+
+.login-form {
+    margin: 0 auto;
+}
+
+.profile-pic-container {
+    width: 200px;
+    height: 100%;
+    padding-right: 10px;
+}
+
+.find-friend-pic {
+    height: 100px;
+}
+
+.find-friend-pic-container {
+    width: 150px;
+}

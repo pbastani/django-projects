@@ -1,0 +1,67 @@
+########################## Creating super user ###################################
+if new database:
+$ python3 manage.py syncdb
+
+otherwise 
+$ python3 manage.py createsuperuser
+
+########################## Resetting the database ###################################
+
+- if not already installed, install django-extensions: pip install django-extensions
+- include it in the installed apps:
+
+INSTALLED_APPS = (
+    ...
+    'django_extensions',
+    ...
+)
+
+$ python manage.py reset_db
+
+########################## Making changes to models #################################
+
+$ python3 manage.py makemigrations appname
+$ python3 manage.py migrate
+
+############################ Stopping the Server #####################################
+
+This usually happens if you  $ python manage.py runserver 8000 and then don't stop the server by hitting Cntrl+C but hit something like Cntrl+Z instead.
+
+To stop the server on port 8000 so that you can run another instance again you can do the following..
+
+Run the below command to list all your processes with 'manage' in their name.
+$ ps aux | grep -i manage
+
+Note the process_id (pid)  for our "manage.py runserver" process which should be the second column from the left.
+
+And then simply run
+$ kill -9 <pid>
+
+e.g. $ kill -9 30144
+
+############################ Using South Migrations #####################################
+
+Before we make our first migrations and generate our database, we also have to create the 
+schema migration. To do this, we must run the following command:
+
+$ manage.py schemamigration TasksManager --initial
+
+Then, we must perform an initial migration:
+
+$ manage.py syncdb --migrate
+
+Django asks us to first create an account. This account will be a superuser. Remember
+the login and password that you enter; you will need this information later.
+South is now fully operational. Each time we need to modify the models, we will make a 
+migration. However, for the migration to be made correctly, you must keep the following 
+things in mind:
+
+• Never perform the Django syncdb command. After running syncdb --migrate for the first 
+time, never run it again. Use migrate afterwards.
+• Always put a default value in the new fields; otherwise, we will be asked to assign a value.
+• Each time we finish editing our models, we must execute the following two commands in the correct order:
+
+       manage.py schemamigration TasksManager –auto
+       manage.py migrate TasksManager
+
+#########################################################################################

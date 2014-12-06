@@ -1,0 +1,41 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <section class="center edit-pic">
+
+        <table data-toggle="table" data-height="600">
+            <tbody>
+            {% for user in users %}
+                {% if user.first_name %}
+                    <tr>
+                        <td class="find-friend-pic-container">
+                            {% if user.profile.picture.url %}
+                                <a href="/portfolio/users/{{ user.username }}/profile">
+                                    <img src="{{ user.profile.picture.url }}" class="find-friend-pic" alt="Profile Image">
+                                </a>
+                            {% else %}
+                                <a href="/portfolio/users/{{ user.username }}/profile">
+                                    <img src="{% static 'portfolio/img/default-no-image.png' %}" class="find-friend-pic" alt="No Profile Image" />
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ user.first_name }} {{ user.last_name }}
+                            <br />Photographer
+                            <br />www.sfu.ca/~pbastani
+                        </td>
+                        <td>
+                            I'm a photographer
+                        </td>
+                        <td>
+                            www.sfu.ca/~pbastani
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </section>
+{% endblock %}

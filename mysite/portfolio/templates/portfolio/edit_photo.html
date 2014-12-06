@@ -1,0 +1,32 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+
+{% block content  %}
+    <section class="center edit-pic">
+        <div>
+            <a href="/portfolio/photos/edit/{{ photo.position|add:"-1" }}">
+                <i class="pull-left glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></i>
+            </a>
+            <a href="/portfolio/photos/edit/{{ photo.position|add:"+1" }}">
+                <i class="pull-right glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+        <br>
+        <div>
+            <a href="/portfolio/photos/edit/{{ photo.position|add:"+1" }}">
+                <img src="{{ photo.file.url }}" class="center-pic">
+            </a>
+        </div>
+        <br>
+
+        <form role="form" method="post" class="form-horizontal center" action="/portfolio/photo/edit/{{ photo.id }}/">
+            {% csrf_token %}
+            <div class="box-body form-group">
+                <input type="text" class="col-xs-10 form-control form-group-element" name="{{ form.title.name }}" placeholder="Add a description" value="{{ photo.title }}">
+                <button type="submit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-save"></i> Save</button>
+                <a href="/portfolio/photos/delete/{{ photo.position }}" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+            </div>
+        </form>
+
+    </section>
+{% endblock %}
