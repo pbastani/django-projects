@@ -4,13 +4,13 @@
 {% block content %}
     <section class="center edit-pic">
 
-        <table data-toggle="table" data-height="600">
+        <table class="table table-striped">
             <tbody>
             {% for user in users %}
-                {% if user.first_name %}
+                {% if user.first_name and user.username != me.username%}
                     <tr>
                         <td class="find-friend-pic-container">
-                            {% if user.profile.picture.url %}
+                            {% if user.profile.picture %}
                                 <a href="/portfolio/users/{{ user.username }}/profile">
                                     <img src="{{ user.profile.picture.url }}" class="find-friend-pic" alt="Profile Image">
                                 </a>

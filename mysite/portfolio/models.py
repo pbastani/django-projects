@@ -4,8 +4,7 @@ from django.conf import settings
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    # user = models.ForeignKey(User, unique=True, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile')
     aboutme = models.TextField("Intro", null=True)
     website_url = models.URLField("Website URL", null=True)
     website_name = models.CharField("Website Name", max_length=50, null=True)
@@ -15,17 +14,8 @@ class Profile(models.Model):
         return self.user.username
 
 
-#class Portfolio(models.Model):
-    # user = models.OneToOneField(User, primary_key=True, related_name='portfolio')
-#    user = models.OneToOneField(User)
-    # user = models.ForeignKey(User, unique=True, related_name='portfolio')
-#    name = models.CharField("Name", max_length=100, default="")
-#    def __str__(self):
-#        return self.user.username
-
-
 class Photo(models.Model):
-    profile = models.ForeignKey(Profile, related_name='photos')
+    user = models.ForeignKey(User, related_name='photos')
     file = models.FileField(upload_to='portfolio_images/', default="")
     views = models.IntegerField(default=0)
     title = models.CharField(max_length=50, default="")
@@ -34,6 +24,17 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Follower(models.Model):
+    me = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='followers')
+
+    def __str__(self):
+        return u'%s -> %s' % (
+            self.user.username,
+            self.me.username,
+        )
 
 
 class Comment(models.Model):

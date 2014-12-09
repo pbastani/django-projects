@@ -13,47 +13,113 @@ from .forms import \
     UploadPhotosForm, \
     EditProfileForm, \
     EditPhotoForm
-from .models import Profile, Photo
+from .models import Profile, Photo, Follower
 
 import pdb
 # pdb.set_trace()
 
 
-def user_profile(request, username=""):
+@login_required()
+def follow(request, username=""):
+    me = request.user
     user = User.objects.filter(username=username).first()
-    profile = Profile.objects.filter(user=user).first()
+    if not user:
+        return HttpResponseRedirect(reverse('portfolio:home'))
+
+    follower = me.followers.filter(user=user).first()
+    pdb.set_trace()
+    if not follower:
+        pdb.set_trace()
+        follower = Follower(me=me, user=user)
+        me.followers.add(follower)
+
+    return HttpResponseRedirect(reverse('portfolio:user_profile', kwargs={'username': username}))
+
+
+def user_photo(request, username="", position=0):
+    me = request.user
+    user = User.objects.filter(username=username).first()
+    photo = user.photos.filter(position=position).first()
+
+    if "-" in position:
+        position = len(user.photos.all())-1
+        return HttpResponseRedirect('/portfolio/users/'+user.username+'/photos/'+repr(position))
+
+    # if image is not found show the first image
+    if not photo:
+        return HttpResponseRedirect('/portfolio/users/'+user.username+'/photos/0')
+
+    page_title = user.first_name + " " + user.last_name + " | Photos"
+    context = {'page_title': page_title,
+               'photo': photo,
+               'user': user,
+               'me': me}
+    return render(request, 'portfolio/user_photo.html', context)
+
+
+def user_friends(request, username=""):
+    me = request.user
+    user = User.objects.filter(username=username).first()
+    photos = user.photos
+    context = {'page_title': "Profile",
+               'photos': photos,
+               'user': user,
+               'me': me}
+    return render(request, 'portfolio/user_friends.html', context)
+
+
+def user_photos(request, username=""):
+    me = request.user
+    user = User.objects.filter(username=username).first()
+    photos = user.photos
+    context = {'page_title': "Profile",
+               'photos': photos,
+               'user': user,
+               'me': me}
+    return render(request, 'portfolio/user_photos.html', context)
+
+
+def user_profile(request, username=""):
+    me = request.user
+    user = User.objects.filter(username=username).first()
+    profile = user.profile
+    follower = me.followers.filter(user=user).first()
+
     context = {'page_title': "Profile",
                'profile': profile,
-               'user': user}
+               'follower': follower,
+               'user': user,
+               'me': me}
     return render(request, 'portfolio/user_profile.html', context)
-
 
 @login_required()
 def find_friends(request):
+    me = request.user
     users = User.objects.all()
     context = {'page_title': "Friends | Find",
-               'users': users}
+               'users': users,
+               'me': me}
     return render(request, 'portfolio/find_friends.html', context)
 
 
 @login_required()
 def upload_photos(request):
-    user = request.user
-    profile = Profile.objects.filter(user=user).first()
+    me = request.user
     if request.method == 'POST':
+        photos = me.photos
         photo_list = request.FILES.getlist('photos')
-        position = len(profile.photos.all())
+        position = len(photos.all())
         for file in photo_list:
             print("Adding photo #"+repr(position))
-            photo = Photo(profile=profile,
+            photo = Photo(user=me,
                           file=file, views=0,
                           title="Untitled",
                           upload_date=datetime.now(),
                           position=position)
-            profile.photos.add(photo)
+            photos.add(photo)
             position += 1
 
-        profile.save()
+        me.save()
         return HttpResponseRedirect(reverse('portfolio:home'))
     else:
         form = UploadPhotosForm()
@@ -63,26 +129,21 @@ def upload_photos(request):
 
 @login_required()
 def delete_portfolio(request):
-    user = request.user
-    profile = Profile.objects.filter(user=user).first()
-    photo = Photo.objects.filter(profile=profile).delete()
+    me = request.user
+    Photo.objects.filter(user=me).delete()
     return HttpResponseRedirect('/portfolio/')
 
 @login_required()
 def delete_photo(request, position=0):
-    user = request.user
-    portfolio = user.portfolio
-    photos = portfolio.photos.all()
-    photo = photos.filter(position=position).first()
-    Photo.objects.filter(id=photo.id).delete()
-    return HttpResponseRedirect('/portfolio/')
+    me = request.user
+    me.photos.filter(position=position).delete()
+    return HttpResponseRedirect('/portfolio/photos/view')
 
 @login_required()
 def edit_photo(request, position=0):
     errors = []
-    user = request.user
-    profile = Profile.objects.filter(user=user).first()
-    photos = profile.photos.all()
+    me = request.user
+    photos = me.photos
     photo = photos.filter(position=position).first()
 
     # for negative indices show the last
@@ -109,7 +170,8 @@ def edit_photo(request, position=0):
         context = {'page_title': "Profile | Edit",
                    'errors': errors,
                    'form': form,
-                   'photo': photo}
+                   'photo': photo,
+                   'me': me}
         return render(request, 'portfolio/edit_photo.html', context)
 
 
@@ -117,8 +179,9 @@ def edit_photo(request, position=0):
 def edit_profile(request):
     errors = []
     context = {}
-    user = request.user
-    profile = Profile.objects.filter(user=user).first()
+    me = request.user
+    profile = Profile.objects.filter(user=me).first()
+
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -139,21 +202,38 @@ def edit_profile(request):
     context = {'page_title': "Profile | Edit",
                'errors': errors,
                'profile': profile,
-               'user': user,
+               'me': me,
                'form': form}
     return render(request, 'portfolio/edit_profile.html', context)
 
+@login_required()
+def view_profile(request):
+    me = request.user
+    context = {'page_title': "Profile",
+               'profile': me.profile,
+               'me': me}
+    return render(request, 'portfolio/profile.html', context)
 
-def home(request):
-    user = request.user
-    if user.is_authenticated():
-        profile = Profile.objects.filter(user=user).first()
-        context = {'page_title': "Profile",
-                   'profile': profile,
-                   'user': user}
-        return render(request, 'portfolio/index.html', context)
-    else:
-        return HttpResponseRedirect(reverse('portfolio:login'))
+
+@login_required()
+def view_photos(request):
+    me = request.user
+    photos = me.photos
+    context = {'page_title': "Profile",
+               'photos': photos,
+               'user': me}
+    return render(request, 'portfolio/photos.html', context)
+
+
+@login_required()
+def view_friends(request):
+    me = request.user
+    followers = me.followers.all()
+    pdb.set_trace()
+    context = {'page_title': "Profile",
+               'followers': followers,
+               'user': me}
+    return render(request, 'portfolio/friends.html', context)
 
 
 def register(request):
@@ -173,12 +253,11 @@ def register(request):
             if len(User.objects.filter(username=username)) > 0:
                 errors.append('Username already taken.')
             if not errors:
-                user = User.objects.create_user(username, email, password)
-                user.first_name = first_name
-                user.last_name = last_name
-                user.save()
-                profile = Profile(user=user)
-                profile.save()
+                me = User.objects.create_user(username, email, password)
+                me.first_name = first_name
+                me.last_name = last_name
+                me.save()
+                Profile(user=me).save()
                 return HttpResponseRedirect('/portfolio/login/')
         else:
             errors.append('All fields are required.')
@@ -195,8 +274,8 @@ def register(request):
 
 
 def signin(request):
-    user = request.user
-    if user.is_authenticated():
+    me = request.user
+    if me.is_authenticated():
         return HttpResponseRedirect('/portfolio/')
     if request.method == 'POST':
         email = request.POST['email']
@@ -210,10 +289,10 @@ def signin(request):
             return HttpResponse("Multiple users with the same email address exist.")
 
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
+        me = authenticate(username=username, password=password)
+        if me:
+            if me.is_active:
+                login(request, me)
                 return HttpResponseRedirect('/portfolio/')
             else:
                 return HttpResponse("Your account is disabled.")

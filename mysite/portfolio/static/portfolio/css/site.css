@@ -2,7 +2,7 @@
     width: 100px;
 }
 
-.edit-pic {
+.preview-pic {
     width: 70%;
 }
 
@@ -20,7 +20,14 @@ form .btn {
     margin-right: auto;
 }
 
+.pull-center {
+    margin-left: auto;
+    margin-right: auto;
+}
 .center {
+    text-align: center;
+}
+.center > div, .center > table /* insert any other block-level elements here */ {
     margin-left: auto;
     margin-right: auto;
 }
@@ -45,4 +52,12 @@ form .btn {
 
 .find-friend-pic-container {
     width: 150px;
+}
+
+.photo-nav-icons {
+    padding: 2px;
+}
+
+.heart {
+    color: mediumvioletred;
 }

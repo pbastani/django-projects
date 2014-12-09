@@ -1,0 +1,47 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+
+{% block content  %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs pull-right">
+            <li class="active"><a href="/portfolio/friends/view"><i class="fa fa-users"></i> Friends</a></li>
+            <li><a href="/portfolio/photos/view"><i class="fa fa-photo"></i> Photos</a></li>
+            <li><a href="/portfolio/profile/view"><i class="fa fa-user"></i> Profile</a></li>
+            <li class="pull-left header">{{ me.first_name }} {{ me.last_name }}</li>
+        </ul>
+        <div class="tab-content">
+
+            <table class="table table-striped">
+                <tbody>
+                {% for follower in followers %}
+                    <tr>
+                        <td class="find-friend-pic-container">
+                            {% if follower.user.profile.picture %}
+                                <a href="/portfolio/users/{{ follower.user.username }}/profile">
+                                    <img src="{{ follower.user.profile.picture.url }}" class="find-friend-pic" alt="Profile Image">
+                                </a>
+                            {% else %}
+                                <a href="/portfolio/users/{{ follower.user.username }}/profile">
+                                    <img src="{% static 'portfolio/img/default-no-image.png' %}" class="find-friend-pic" alt="No Profile Image" />
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ follower.user.first_name }} {{ follower.user.last_name }}
+                            <br />Photographer
+                            <br />www.sfu.ca/~pbastani
+                        </td>
+                        <td>
+                            I'm a photographer
+                        </td>
+                        <td>
+                            www.sfu.ca/~pbastani
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div><!-- /.nav-tabs-custom --a>
+{% endblock %}

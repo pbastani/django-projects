@@ -19,7 +19,7 @@
         </div>
         <br>
 
-        <form role="form" method="post" class="form-horizontal center" action="/portfolio/photo/edit/{{ photo.id }}/">
+        <form role="form" method="post" class="form-horizontal center" action="/portfolio/photos/edit/{{ photo.position }}/">
             {% csrf_token %}
             <div class="box-body form-group">
                 <input type="text" class="col-xs-10 form-control form-group-element" name="{{ form.title.name }}" placeholder="Add a description" value="{{ photo.title }}">

@@ -1,0 +1,22 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+
+{% block content  %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs pull-right">
+            <li><a href="/portfolio/users/{{ user.username }}/friends/"><i class="fa fa-users"></i> Friends <small class="badge"> 120</small></a></li>
+            <li class="active"><a href="/portfolio/users/{{ user.username }}/photos/"><i class="fa fa-photo"></i> Photos</a></li>
+            <li><a href="/portfolio/users/{{ user.username }}/profile/"><i class="fa fa-user"></i> Profile</a></li>
+            <li class="pull-left header">{{ user.first_name }} {{ user.last_name }}</li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="chart tab-pane active" style="position: relative; height: 300px;">
+                {% for photo in photos.all %}
+                    <a href="/portfolio/users/{{ user.username }}/photos/{{ forloop.counter0 }}"><img src="{{ photo.file.url }}" class="portfolio-pic"></a>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div><!-- /.nav-tabs-custom -->
+{% endblock %}
