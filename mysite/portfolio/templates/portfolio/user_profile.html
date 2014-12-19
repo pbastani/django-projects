@@ -4,7 +4,7 @@
 {% block content  %}
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs pull-right">
-            <li><a href="/portfolio/users/{{ user.username }}/friends/"><i class="fa fa-users"></i> Friends <small class="badge"> 120</small></a></li>
+            <li><a href="/portfolio/users/{{ user.username }}/followers/"><i class="fa fa-users"></i> Connections</a></li>
             <li><a href="/portfolio/users/{{ user.username }}/photos/"><i class="fa fa-photo"></i> Photos</a></li>
             <li class="active"><a href="/portfolio/users/{{ user.username }}/profile/"><i class="fa fa-user"></i> Profile</a></li>
             <li class="pull-left header">{{ user.first_name }} {{ user.last_name }}</li>
@@ -12,7 +12,7 @@
         <div class="tab-content">
             <div class="tab-pane active" style="height: 300px;">
                 <div class="pull-left image profile-pic-container">
-                    {% if profile %}
+                    {% if profile.picture %}
                         <img src="{{ profile.picture.url }}" class="profile-pic" alt="Profile Image">
                     {% else %}
                         <img src="{% static 'portfolio/img/default-no-image.png' %}" alt="No Profile Image" />

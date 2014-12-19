@@ -13,7 +13,7 @@ from .forms import \
     UploadPhotosForm, \
     EditProfileForm, \
     EditPhotoForm
-from .models import Profile, Photo, Follower
+from portfolio.models import Profile, Photo
 
 import pdb
 # pdb.set_trace()
@@ -26,14 +26,27 @@ def follow(request, username=""):
     if not user:
         return HttpResponseRedirect(reverse('portfolio:home'))
 
-    follower = me.followers.filter(user=user).first()
-    pdb.set_trace()
+    profile = user.profile
+    follower = profile.followers.filter(user=me).first()
     if not follower:
-        pdb.set_trace()
-        follower = Follower(me=me, user=user)
-        me.followers.add(follower)
+        user.profile.followers.add(me.profile)
+        me.profile.followees.add(user.profile)
 
     return HttpResponseRedirect(reverse('portfolio:user_profile', kwargs={'username': username}))
+
+
+def user_profile(request, username=""):
+    me = request.user
+    user = User.objects.filter(username=username).first()
+    profile = user.profile
+    follower = profile.followers.filter(user=me).first()
+
+    context = {'page_title': "Profile",
+               'profile': profile,
+               'follower': follower,
+               'user': user,
+               'me': me}
+    return render(request, 'portfolio/user_profile.html', context)
 
 
 def user_photo(request, username="", position=0):
@@ -45,7 +58,6 @@ def user_photo(request, username="", position=0):
         position = len(user.photos.all())-1
         return HttpResponseRedirect('/portfolio/users/'+user.username+'/photos/'+repr(position))
 
-    # if image is not found show the first image
     if not photo:
         return HttpResponseRedirect('/portfolio/users/'+user.username+'/photos/0')
 
@@ -57,7 +69,7 @@ def user_photo(request, username="", position=0):
     return render(request, 'portfolio/user_photo.html', context)
 
 
-def user_friends(request, username=""):
+def user_followers(request, username=""):
     me = request.user
     user = User.objects.filter(username=username).first()
     photos = user.photos
@@ -65,7 +77,7 @@ def user_friends(request, username=""):
                'photos': photos,
                'user': user,
                'me': me}
-    return render(request, 'portfolio/user_friends.html', context)
+    return render(request, 'portfolio/user_followers.html', context)
 
 
 def user_photos(request, username=""):
@@ -78,28 +90,14 @@ def user_photos(request, username=""):
                'me': me}
     return render(request, 'portfolio/user_photos.html', context)
 
-
-def user_profile(request, username=""):
-    me = request.user
-    user = User.objects.filter(username=username).first()
-    profile = user.profile
-    follower = me.followers.filter(user=user).first()
-
-    context = {'page_title': "Profile",
-               'profile': profile,
-               'follower': follower,
-               'user': user,
-               'me': me}
-    return render(request, 'portfolio/user_profile.html', context)
-
 @login_required()
-def find_friends(request):
+def browse_users(request):
     me = request.user
     users = User.objects.all()
-    context = {'page_title': "Friends | Find",
+    context = {'page_title': "Users | Browse",
                'users': users,
                'me': me}
-    return render(request, 'portfolio/find_friends.html', context)
+    return render(request, 'portfolio/browse_users.html', context)
 
 
 @login_required()
@@ -124,7 +122,8 @@ def upload_photos(request):
     else:
         form = UploadPhotosForm()
 
-    context = {'form': form}
+    context = {'form': form,
+               'me': me}
     return render(request, 'portfolio/upload_photos.html', context)
 
 @login_required()
@@ -207,7 +206,7 @@ def edit_profile(request):
     return render(request, 'portfolio/edit_profile.html', context)
 
 @login_required()
-def view_profile(request):
+def my_profile(request):
     me = request.user
     context = {'page_title': "Profile",
                'profile': me.profile,
@@ -216,24 +215,27 @@ def view_profile(request):
 
 
 @login_required()
-def view_photos(request):
+def my_photos(request):
     me = request.user
     photos = me.photos
     context = {'page_title': "Profile",
                'photos': photos,
-               'user': me}
+               'me': me}
     return render(request, 'portfolio/photos.html', context)
 
 
 @login_required()
-def view_friends(request):
+def my_connections(request):
     me = request.user
-    followers = me.followers.all()
+    followers = me.profile.followers.all()
+    followees = me.profile.followees.all()
+
     pdb.set_trace()
     context = {'page_title': "Profile",
                'followers': followers,
-               'user': me}
-    return render(request, 'portfolio/friends.html', context)
+               'followees': followees,
+               'me': me}
+    return render(request, 'portfolio/followers.html', context)
 
 
 def register(request):
@@ -293,6 +295,8 @@ def signin(request):
         if me:
             if me.is_active:
                 login(request, me)
+                me.profile.last_online = datetime.today()
+                me.save()
                 return HttpResponseRedirect('/portfolio/')
             else:
                 return HttpResponse("Your account is disabled.")

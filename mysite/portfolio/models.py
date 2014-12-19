@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.conf import settings
+import datetime
 
 
 class Profile(models.Model):
@@ -9,6 +9,9 @@ class Profile(models.Model):
     website_url = models.URLField("Website URL", null=True)
     website_name = models.CharField("Website Name", max_length=50, null=True)
     picture = models.FileField(upload_to='profile_images/%Y/%m/%d', null=True)
+    last_online = models.DateTimeField(default=datetime.date.today())
+    follower = models.ManyToManyField("self", related_name='followers', symmetrical=False)
+    followee = models.ManyToManyField("self", related_name='followees', symmetrical=False)
 
     def __str__(self):
         return self.user.username
@@ -24,17 +27,6 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Follower(models.Model):
-    me = models.ForeignKey(User)
-    user = models.ForeignKey(User, related_name='followers')
-
-    def __str__(self):
-        return u'%s -> %s' % (
-            self.user.username,
-            self.me.username,
-        )
 
 
 class Comment(models.Model):
