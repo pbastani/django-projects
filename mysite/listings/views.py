@@ -19,9 +19,9 @@ def home(request):
     context = {}
     me = request.user
     if me.is_authenticated():
-        return render(request, 'listings/admin/blank.html', context)
+        return render(request, 'listings/admin/index.html', context)
     else:
-        return HttpResponseRedirect('/listings/signin/')
+        return render(request, 'listings/frontend/index.html', context)
 
 
 def signup(request):
@@ -51,12 +51,12 @@ def signup(request):
                 Profile(user=me).save()
                 return HttpResponseRedirect('/listings/signin/')
         else:
-            errors.append('Form data is invalid.')
+            errors.append('Invalid form data submitted.')
     else:
         form = SignupForm(initial={'username': '', 'email': '', 'password': ''})
         user = request.user
         if user.is_authenticated():
-            return redirect('/portfolio/')
+            return redirect('/listings/')
 
     context_dict = {'form': form,
                     'errors': errors,
@@ -74,26 +74,27 @@ def signin(request):
         if form.is_valid():
             form_data = form.cleaned_data
 
-        email = form_data['email']
-        user_by_email = User.objects.filter(email=email)
+            email = form_data['email']
+            user_by_email = User.objects.filter(email=email)
 
-        if user_by_email.count() == 0:
-            errors.append('Email address not registered.')
-        else:
-            username = user_by_email[0].username
-
-        password = request.POST['password']
-        me = authenticate(username=username, password=password)
-        if me:
-            if me.is_active:
-                login(request, me)
-                me.profile.last_online = datetime.today()
-                me.save()
-                return HttpResponseRedirect('/listings/')
+            if user_by_email.count() == 0:
+                errors.append('Email address not registered.')
             else:
-                return HttpResponse("Your account is disabled.")
+                username = user_by_email[0].username
+                password = request.POST['password']
+                me = authenticate(username=username, password=password)
+                if me:
+                    if me.is_active:
+                        login(request, me)
+                        me.profile.last_online = datetime.today()
+                        me.save()
+                        return HttpResponseRedirect('/listings/')
+                    else:
+                        errors.append('Your account is disabled.')
+                else:
+                    errors.append('Invalid login details.')
         else:
-            return HttpResponse("Invalid login details supplied.")
+            errors.append('Invalid form data submitted.')
     else:
         logged_in = False
         form = SigninForm()
@@ -103,7 +104,7 @@ def signin(request):
         return render(request, 'listings/signin.html', context_dict)
 
 
-@login_required()
 def signout(request):
+    pdb.set_trace()
     logout(request)
     return HttpResponseRedirect('/listings/')

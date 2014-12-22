@@ -15,8 +15,8 @@
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,700' rel='stylesheet' type='text/css'>
 
     <!--[if lt IE 10]>
-        <script src="{% static 'listings/assets/js/media.match.min.js"></script>
-        <script src="{% static 'listings/assets/js/placeholder.min.js"></script>
+        <script src="{% static 'listings/assets/js/media.match.min.js' %}"></script>
+        <script src="{% static 'listings/assets/js/placeholder.min.js' %}"></script>
     <![endif]-->
 
     <link href="{% static 'listings/assets/fonts/font-awesome/css/font-awesome.min.css' %}" type="text/css" rel="stylesheet">        <!-- Font Awesome -->
@@ -28,10 +28,10 @@
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries. Placeholdr.js enables the placeholder attribute -->
     <!--[if lt IE 9]>
-        <link href="{% static 'listings/assets/css/ie8.css" type="text/css' %}" rel="stylesheet">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.1.0/respond.min.js"></script>
-        <script type="text/javascript" src="{% static 'listings/assets/plugins/charts-flot/excanvas.min.j' %}s"></script>
-        <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <link href="{% static 'listings/assets/css/ie8.css' %}" type="text/css" rel="stylesheet">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.1.0/respond.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'listings/assets/plugins/charts-flot/excanvas.min.js' %}"></script>
+        <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js' %}"></script>
     <![endif]-->
     <!-- The following CSS are included as plugins and can be removed if unused-->
 
@@ -39,6 +39,7 @@
     <link href="{% static 'listings/assets/plugins/switchery/switchery.css' %}" type="text/css" rel="stylesheet">        					<!-- Switchery -->
     <link href="{% static 'listings/assets/plugins/fullcalendar/fullcalendar.css' %}" type="text/css" rel="stylesheet"> 						<!-- FullCalendar -->
 
+    <link href="{% static 'listings/css/site.css' %}" type="text/css" rel="stylesheet">
 </head>
 
 <body class="infobar-offcanvas">
@@ -471,7 +472,7 @@
         <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-file-o"></i></a></li>
         <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-credit-card"></i></a></li>
         <li class="divider"></li>
-        <li><a href="#"><span class="pull-left">Sign Out</span> <i class="pull-right fa fa-sign-out"></i></a></li>
+        <li><a href="/listings/signout/"><span class="pull-left">Sign Out</span> <i class="pull-right fa fa-sign-out"></i></a></li>
     </ul>
 </li>
 
@@ -746,22 +747,21 @@
 </div>
 </div>
 <div class="static-content-wrapper">
-<div class="static-content">
+    <div class="static-content">
+        <div class="page-content">
+            {% block content %}
 
-{% block content  %}
-
-{% endblock %}
-
-</div>
-<footer role="contentinfo">
-    <div class="clearfix">
-        <ul class="list-unstyled list-inline pull-left">
-            <li><h6 style="margin: 0;"> &copy; 2014 Avalon</h6></li>
-        </ul>
-        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+            {% endblock %}
+        </div>
+        <footer role="contentinfo">
+            <div class="clearfix">
+                <ul class="list-unstyled list-inline pull-left">
+                    <li><h6 class="no-maring">Rosetti Listings</h6></li>
+                </ul>
+                <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+            </div>
+        </footer>
     </div>
-</footer>
-</div>
 </div>
 </div>
 
@@ -946,276 +946,196 @@
 </div> -->
 
 <!-- <div class="widget">
-            <div class="widget-heading">
-                <a href="javascript:;" data-toggle="collapse" data-target="#contactdetails"><h4>Contact Details</h4></a>
+    <div class="widget-heading">
+        <a href="javascript:;" data-toggle="collapse" data-target="#contactdetails"><h4>Contact Details</h4></a>
+    </div>
+    <div class="widget-body collapse in" id="contactdetails">
+        <div class="contactdetails">
+            <div class="avatar">
+                <img src="assets/demo/avatar/avatar_11.png" class="img-responsive img-circle">
             </div>
-            <div class="widget-body collapse in" id="contactdetails">
-                <div class="contactdetails">
-                    <div class="avatar">
-                        <img src="{% static 'listings/assets/demo/avatar/avatar_11.png' %}" class="img-responsive img-circle">
-                    </div>
-                    <span class="contact-name">Joseph Vasquez</span>
-                    <span class="contact-status">Client Representative</span>
-                    <ul class="details">
-                        
-                        <li><a href="#"><i class="fa fa-fw fa-envelope-o"></i>&nbsp;p.bateman@gmail.com</a></li>
-                        <li><i class="fa fa-fw fa-phone"></i>&nbsp;+1 234 567 890</li>
-                        <li><i class="fa fa-fw fa-map-marker"></i>&nbsp;Hollywood Hills, California</li>
-                        
-                    </ul>
+            <span class="contact-name">Joseph Vasquez</span>
+            <span class="contact-status">Client Representative</span>
+            <ul class="details">
 
-            </div>
-        </div> -->
+                <li><a href="#"><i class="fa fa-fw fa-envelope-o"></i>&nbsp;p.bateman@gmail.com</a></li>
+                <li><i class="fa fa-fw fa-phone"></i>&nbsp;+1 234 567 890</li>
+                <li><i class="fa fa-fw fa-map-marker"></i>&nbsp;Hollywood Hills, California</li>
+
+            </ul>
+
+    </div>
+</div> -->
 
 
 <!-- <div class="widget">
-            <div class="widget-heading">
-                <a href="javascript:;" data-toggle="collapse" data-target="#contact-list"><h4>Contact List</h4></a>
-            </div>
-            <div class="widget-body collapse in" id="contact-list">
-                <ul class="contact-list">
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_06.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">Jessie Pinkman</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Senior Developer</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_01.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">Emma Watson</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Graphic Designer</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_09.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">David Luke</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Client Representative</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_11.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">John Arren</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Project Manager</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_05.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">Ben Stiller</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Senior Designer</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="avatar">
-                            <img src="{% static 'listings/assets/demo/avatar/avatar_08.png' %}" class="img-responsive img-circle" />
-                        </div>
-                        <div class="details">
-                            <div class="clearfix">
-                                <a href="#" class="contact-name pull-left">Jeofry Thompson</a>
-                                
-                                    <div class="contact-profiles">
-                                        <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
-                                            <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                
-                            </div>
-                            <span class="contact-details">Developer</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div> -->
-
-
-
-
-</div>
-</div>
-</div>
-
-
-<!-- Switcher -->
-<div class="demo-options">
-    <div class="demo-options-icon"><i class="fa fa-spin fa-fw fa-smile-o"></i></div>
-    <div class="demo-heading">Demo Settings</div>
-
-    <div class="demo-body">
-        <div class="tabular">
-            <div class="tabular-row">
-                <div class="tabular-cell">Fixed Header</div>
-                <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" checked data-size="mini" data-on-color="success" data-off-color="default" name="demo-fixedheader" data-on-text="I" data-off-text="O"></div>
-            </div>
-            <div class="tabular-row">
-                <div class="tabular-cell">Boxed Layout</div>
-                <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" data-size="mini" data-on-color="success" data-off-color="default" name="demo-boxedlayout" data-on-text="I" data-off-text="O"></div>
-            </div>
-            <div class="tabular-row">
-                <div class="tabular-cell">Collapse Leftbar</div>
-                <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" data-size="mini" data-on-color="success" data-off-color="default" name="demo-collapseleftbar" data-on-text="I" data-off-text="O"></div>
-            </div>
-            <div class="tabular-row">
-                <div class="tabular-cell">Collapse Rightbar</div>
-                <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" checked data-size="mini" data-on-color="success" data-off-color="default" name="demo-collapserightbar" data-on-text="I" data-off-text="O"></div>
-            </div>
-            <div class="tabular-row hide" id="demo-horizicon">
-                <div class="tabular-cell">Horizontal Icons</div>
-                <div class="tabular-cell demo-switches"><input class="bootstrap-switch" type="checkbox" checked data-size="mini" data-on-color="primary" data-off-color="warning" data-on-text="S" data-off-text="L" name="demo-horizicons" ></div>
-            </div>
-        </div>
-
+    <div class="widget-heading">
+        <a href="javascript:;" data-toggle="collapse" data-target="#contact-list"><h4>Contact List</h4></a>
     </div>
+    <div class="widget-body collapse in" id="contact-list">
+        <ul class="contact-list">
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_06.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">Jessie Pinkman</a>
 
-    <div class="demo-body">
-        <div class="option-title">Header Colors</div>
-        <ul id="demo-header-color" class="demo-color-list">
-            <li><span class="demo-white"></span></li>
-            <li><span class="demo-black"></span></li>
-            <li><span class="demo-midnightblue"></span></li>
-            <li><span class="demo-primary"></span></li>
-            <li><span class="demo-info"></span></li>
-            <li><span class="demo-alizarin"></span></li>
-            <li><span class="demo-grape"></span></li>
-            <li><span class="demo-violet"></span></li>
-            <li><span class="demo-indigo"></span></li>
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Senior Developer</span>
+                </div>
+            </li>
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_01.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">Emma Watson</a>
+
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Graphic Designer</span>
+                </div>
+            </li>
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_09.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">David Luke</a>
+
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Client Representative</span>
+                </div>
+            </li>
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_11.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">John Arren</a>
+
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Project Manager</span>
+                </div>
+            </li>
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_05.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">Ben Stiller</a>
+
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Senior Designer</span>
+                </div>
+            </li>
+            <li>
+                <div class="avatar">
+                    <img src="assets/demo/avatar/avatar_08.png" class="img-responsive img-circle" />
+                </div>
+                <div class="details">
+                    <div class="clearfix">
+                        <a href="#" class="contact-name pull-left">Jeofry Thompson</a>
+
+                            <div class="contact-profiles">
+                                <a href="javascript:;" class="dropdown-toggle profile-list" data-toggle="dropdown">
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#"><i class="fa pull-right fa-envelope-o" style="color: #cccccc;"></i>Email</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-skype" style="color: #12a5f4;"></i>Skype</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-twitter" style="color: #00aced;"></i>Twitter</a></li>
+                                    <li><a href="#"><i class="fa pull-right fa-linkedin" style="color: #007bb6;"></i>LinkedIn</a></li>
+                                </ul>
+                            </div>
+
+
+                    </div>
+                    <span class="contact-details">Developer</span>
+                </div>
+            </li>
         </ul>
     </div>
+</div> -->
 
-    <div class="demo-body">
-        <div class="option-title">Sidebar Colors</div>
-        <ul id="demo-sidebar-color" class="demo-color-list">
-            <li><span class="demo-white"></span></li>
-            <li><span class="demo-black"></span></li>
-            <li><span class="demo-midnightblue"></span></li>
-            <li><span class="demo-primary"></span></li>
-            <li><span class="demo-info"></span></li>
-            <li><span class="demo-alizarin"></span></li>
-            <li><span class="demo-grape"></span></li>
-            <li><span class="demo-violet"></span></li>
-            <li><span class="demo-indigo"></span></li>
-        </ul>
-    </div>
 
-    <div class="demo-body hide" id="demo-boxes">
-        <div class="option-title">Boxed Layout Options</div>
-        <ul id="demo-boxed-bg" class="demo-color-list">
-            <li><span class="pattern-brickwall"></span></li>
-            <li><span class="pattern-dark-stripes"></span></li>
-            <li><span class="pattern-rockywall"></span></li>
-            <li><span class="pattern-subtle-carbon"></span></li>
-            <li><span class="pattern-tweed"></span></li>
-            <li><span class="pattern-vertical-cloth"></span></li>
-            <li><span class="pattern-grey_wash_wall"></span></li>
-            <li><span class="pattern-pw_maze_black"></span></li>
-            <li><span class="patther-wild_oliva"></span></li>
-            <li><span class="pattern-stressed_linen"></span></li>
-            <li><span class="pattern-sos"></span></li>
-        </ul>
-    </div>
+
 
 </div>
-<!-- /Switcher -->
+</div>
+</div>
+
+
 <!-- Load site level scripts -->
 
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -1239,7 +1159,7 @@
 
 <script src="{% static 'listings/assets/plugins/bootbox/bootbox.js' %}"></script>							<!-- Bootbox -->
 
-<script src="{% static 'listings/assets/plugins/simpleWeather/jquery.simpleWeather.min.js' %}"></script> <!-- Weather plugin-->
+<script src="assets/plugins/simpleWeather/jquery.simpleWeather.min.js' %}"></script> <!-- Weather plugin-->
 
 <script src="{% static 'listings/assets/js/application.js' %}"></script>
 <script src="{% static 'listings/assets/demo/demo.js' %}"></script>
@@ -1250,29 +1170,29 @@
 
 <!-- Load page level scripts-->
 
-<script src="{% static 'listings/assets/plugins/form-daterangepicker/daterangepicker.js' %}"></script>     	<!-- Date Range Picker -->
-<script src="{% static 'listings/assets/plugins/form-daterangepicker/moment.min.js' %}"></script>             <!-- Moment.js for Date Range Picker -->
+<script src="assets/plugins/form-daterangepicker/daterangepicker.js"></script>     	<!-- Date Range Picker -->
+<script src="assets/plugins/form-daterangepicker/moment.min.js"></script>             <!-- Moment.js for Date Range Picker -->
 
-<script src="{% static 'listings/assets/plugins/easypiechart/jquery.easypiechart.js' %}"></script> 			<!-- EasyPieChart -->
-<script src="{% static 'listings/assets/plugins/switchery/switchery.js' %}"></script>     					<!-- Switchery -->
+<script src="assets/plugins/easypiechart/jquery.easypiechart.js"></script> 			<!-- EasyPieChart -->
+<script src="assets/plugins/switchery/switchery.js"></script>     					<!-- Switchery -->
 
-<script src="{% static 'listings/assets/plugins/fullcalendar/fullcalendar.min.js' %}"></script>   			<!-- FullCalendar -->
+<script src="assets/plugins/fullcalendar/fullcalendar.min.js"></script>   			<!-- FullCalendar -->
 
 <!-- Charts -->
-<script src="{% static 'listings/assets/plugins/charts-flot/jquery.flot.min.js' %}"></script>             	<!-- Flot Main File -->
-<script src="{% static 'listings/assets/plugins/charts-flot/jquery.flot.stack.min.js' %}"></script>       	<!-- Flot Stacked Charts Plugin -->
-<script src="{% static 'listings/assets/plugins/charts-flot/jquery.flot.orderBars.min.js' %}"></script>   	<!-- Flot Ordered Bars Plugin-->
-<script src="{% static 'listings/assets/plugins/charts-flot/jquery.flot.resize.min.js' %}"></script>          <!-- Flot Responsive -->
-<script src="{% static 'listings/assets/plugins/charts-flot/jquery.flot.tooltip.min.js' %}"></script> 		<!-- Flot Tooltips -->
+<script src="assets/plugins/charts-flot/jquery.flot.min.js"></script>             	<!-- Flot Main File -->
+<script src="assets/plugins/charts-flot/jquery.flot.stack.min.js"></script>       	<!-- Flot Stacked Charts Plugin -->
+<script src="assets/plugins/charts-flot/jquery.flot.orderBars.min.js"></script>   	<!-- Flot Ordered Bars Plugin-->
+<script src="assets/plugins/charts-flot/jquery.flot.resize.min.js"></script>          <!-- Flot Responsive -->
+<script src="assets/plugins/charts-flot/jquery.flot.tooltip.min.js"></script> 		<!-- Flot Tooltips -->
 
 <!-- Maps -->
-<script src="{% static 'listings/assets/plugins/jQuery-Mapael/js/raphael/raphael-min.js' %}"></script>        <!-- Load Raphael as Dependency -->
-<script src="{% static 'listings/assets/plugins/jQuery-Mapael/js/jquery.mapael.js' %}"></script>              <!-- jQuery Mapael -->
-<script src="{% static 'listings/assets/plugins/jQuery-Mapael/js/maps/world_countries.js' %}"></script>       <!-- Vector Data of World Countries -->
+<script src="assets/plugins/jQuery-Mapael/js/raphael/raphael-min.js"></script>        <!-- Load Raphael as Dependency -->
+<script src="assets/plugins/jQuery-Mapael/js/jquery.mapael.js"></script>              <!-- jQuery Mapael -->
+<script src="assets/plugins/jQuery-Mapael/js/maps/world_countries.js"></script>       <!-- Vector Data of World Countries -->
 
-<script src="{% static 'listings/assets/plugins/wijets/wijets.js' %}"></script>     							<!-- Wijet -->
+<script src="assets/plugins/wijets/wijets.js"></script>     							<!-- Wijet -->
 
-<script src="{% static 'listings/assets/demo/demo-index.js' %}"></script> 									<!-- Initialize scripts for this page-->
+<script src="assets/demo/demo-index.js"></script> 									<!-- Initialize scripts for this page-->
 
 <!-- End loading page level scripts-->
 
