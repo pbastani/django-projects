@@ -1,4 +1,0 @@
-
-December 19, 2014
-
-- set up the Avalon template within listings app
