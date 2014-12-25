@@ -1,0 +1,32 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block content  %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs pull-right">
+            <li><a href="/portfolio/followers/view"><i class="fa fa-users"></i> Connections</a></li>
+            <li class="active"><a href="/portfolio/photos/view"><i class="fa fa-photo"></i> Photos</a></li>
+            <li><a href="/portfolio/profile/view"><i class="fa fa-user"></i> Profile</a></li>
+            <li class="pull-left header">{{ me.first_name }} {{ me.last_name }}</li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="chart tab-pane active" id="photos" style="position: relative; height: 300px;">
+                <div>
+                    {% for photo in photos.all %}
+                        {% thumbnail photo.file "100x100" crop="center" as im %}
+                            <a href="/portfolio/photos/edit/{{ forloop.counter0 }}">
+                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                            </a>
+                        {% endthumbnail %}
+                    {% endfor %}
+                </div>
+                <div>
+                    <a href="/portfolio/portfolio/delete/" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-trash"></i> Delete</a>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- /.nav-tabs-custom --a>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'listings/admin/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="page-heading">
+        <h1>Add Post</h1>
+    </div>
+
+    <form role="form" method="post" class="form-horizontal col-md-offset-2 col-md-8" action="/listings/myposts/edit/0/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="post-form">
+            <!-- title -->
+            <div class="form-group-element">
+                <label for="{{ form.title.name }}" class="control-label col-xs-1">{{ form.title.label }}</label>
+                <div class="col-xs-11">
+                    <input type="text" class="col-xs-10 form-control form-group-element" name="{{ form.title.name }}" placeholder="Untitled Post" value="{{ post.title }}">
+                </div>
+            </div>
+
+            <!-- content -->
+            <div class="form-group-element">
+                <label for="{{ form.content.name }}" class="control-label col-xs-1">{{ form.content.label }}</label>
+                <div class="col-xs-11">
+                    <textarea class="col-xs-10 form-control form-group-element" rows="8" name="{{ form.content.name }}" placeholder="Post Content">{{ post.content }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group-element col-md-offset-2 pull-right" style="padding-right: 10px;">
+                <button type="submit" class="btn btn-sm btn-primary-alt">Post</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

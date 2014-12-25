@@ -1,0 +1,37 @@
+{% extends 'listings/admin/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="page-heading">
+        <h1>My Post</h1>
+    </div>
+
+    <table class="table table-bordered mb0" cellspacing="0">
+        <thead>
+        <tr>
+            <th style="width: 100px; text-align: center;">Status</th>
+            <th style="width: 100px; text-align: center;">Manage</th>
+            <th>Title</th>
+            <th style="width: 100px; text-align: center;">Post Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+        <tr style="background-color: #E8FFDD;">
+            <td style="width: 100px; text-align: center;">Active</td>
+            <td style="width: 100px; text-align: center;">
+                <a href="/listings/myposts/edit/{{ post.id }}" class="col-md-4" title="Edit"><i class="fa fa-pencil"></i></a>
+                <a href="/listings/myposts/renew/{{ post.id }}" class="col-md-4" title="Renew"><i class="fa fa-refresh"></i></a>
+                <a href="/listings/myposts/delete/{{ post.id }}" class="col-md-4" title="Delete"><i class="fa fa-trash-o"></i></a>
+            </td>
+            <td>
+                <a href="/listings/myposts/edit/{{ post.id }}">{{ post.title }}</a>
+            </td>
+            <td style="width: 100px; text-align: center;">{{ post.create_date|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

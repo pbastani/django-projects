@@ -8,11 +8,72 @@ from datetime import datetime
 
 from .forms import \
     SignupForm, \
-    SigninForm
+    SigninForm, \
+    EditPostForm
 
-from listings.models import Profile
+from listings.models import Profile, Post
 
 import pdb
+
+
+def frontend(request):
+    context = {}
+    return render(request, 'listings/index.html', context)
+
+
+@login_required()
+def my_posts(request):
+    me = request.user
+    posts = Post.objects.all().filter(user=me)
+    context = {'posts': posts,
+               'page_title': "View Post"}
+    return render(request, 'listings/admin/my_posts.html', context)
+
+
+@login_required()
+def delete_post(request, post_id=0):
+    if int(post_id) > 0:
+        post = Post.objects.get(id=int(post_id))
+        post.delete()
+    return HttpResponseRedirect('/listings/myposts/view/')
+
+
+@login_required()
+def edit_post(request, post_id=0):
+    errors = []
+    me = request.user
+    if request.method == 'POST':
+        form = EditPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form_data = form.cleaned_data
+            title = form_data['title']
+            content = form_data['content']
+            post = Post(user=me, title=title, content=content, create_date=datetime.today())
+
+            #if request.FILES:
+            #    pictures = request.FILES['picture']
+            #    print("****** Read the pictures.")
+            #    pdb.set_trace()
+
+            post.save()
+            return HttpResponseRedirect('/listings/myposts/view/')
+    else:
+        form = EditPostForm()
+        post = Post()
+        if int(post_id) > 0:
+            post = Post.objects.get(id=int(post_id))
+
+        context = {'form': form,
+                   'post': post,
+                   'errors': errors,
+                   'page_title': "Add Post"}
+        return render(request, 'listings/admin/edit_post.html', context)
+
+
+def view_category(request, category=""):
+    context = {'category': 'General'}
+    me = request.user
+    return render(request, 'listings/category.html', context)
 
 
 def home(request):
@@ -21,7 +82,7 @@ def home(request):
     if me.is_authenticated():
         return render(request, 'listings/admin/index.html', context)
     else:
-        return render(request, 'listings/frontend/index.html', context)
+        return HttpResponseRedirect('/listings/frontend/')
 
 
 def signup(request):
@@ -58,10 +119,10 @@ def signup(request):
         if user.is_authenticated():
             return redirect('/listings/')
 
-    context_dict = {'form': form,
+    context = {'form': form,
                     'errors': errors,
                     'page_title': "Register"}
-    return render(request, 'listings/signup.html', context_dict)
+    return render(request, 'listings/signup.html', context)
 
 
 def signin(request):
@@ -98,10 +159,10 @@ def signin(request):
     else:
         logged_in = False
         form = SigninForm()
-        context_dict = {'form': form,
+        context = {'form': form,
                         'logged_in': logged_in,
                         'page_title': "Login"}
-        return render(request, 'listings/signin.html', context_dict)
+        return render(request, 'listings/signin.html', context)
 
 
 def signout(request):

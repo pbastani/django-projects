@@ -1,0 +1,40 @@
+{% extends 'portfolio/base.html' %}
+{% load staticfiles %}
+
+{% block content  %}
+    <section class="content">
+        <div class="row">
+            <div class="box box-primary login-form" style="width: 30%;">
+                <div class="box-header">
+                    <h3 class="box-title">Register</h3>
+                </div>
+                {% if errors %}
+                    <div style="color: darkred; font-weight: bold;">
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <form role="form" method="post" action="/portfolio/register/">
+                    {% csrf_token %}
+                    <div class="box-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-group-element" name="{{ register_form.first_name.name }}" placeholder="First Name" value="">
+                            <input type="text" class="form-control form-group-element" name="{{ register_form.last_name.name }}" placeholder="Last Name" value="">
+                            <input type="text" class="form-control form-group-element" name="{{ register_form.username.name }}" placeholder="Username" value="">
+                            <input type="email" class="form-control form-group-element" name="{{ register_form.email.name }}" placeholder="Email Address" value="">
+                            <input type="password" class="form-control form-group-element" name="{{ register_form.password.name }}" placeholder="Password" value="">
+                        </div>
+                    </div><!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="/portfolio/login" class="pull-right" style="margin-top: 5px;">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

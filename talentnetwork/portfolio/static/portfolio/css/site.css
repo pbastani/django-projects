@@ -1,0 +1,69 @@
+.portfolio-pic {
+    width: 100px;
+}
+
+.preview-pic {
+    width: 70%;
+}
+
+.preview-pic form {
+    width: 90%;
+}
+
+form .btn {
+    margin: 2px;
+}
+
+.center-pic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pull-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+.center {
+    text-align: center;
+}
+.center > div, .center > table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-group-element {
+    margin-bottom: 2px;
+}
+
+.login-form {
+    margin: 0 auto;
+}
+
+.profile-pic-container {
+    width: 200px;
+    height: 100%;
+    padding-right: 10px;
+}
+
+.find-friend-pic {
+    height: 100px;
+}
+
+.find-friend-pic-container {
+    width: 150px;
+}
+
+.photo-nav-icons {
+    padding: 2px;
+}
+
+.heart {
+    color: mediumvioletred;
+}
+
+.friend-row
+{
+    margin: 5px;
+    padding: 5px;
+}
