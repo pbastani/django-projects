@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('.square-thumb').nailthumb({
+            imageCustomFinder: function(el){
+                var image = $('<img />').attr('src',el.attr('href').replace('/full/','/small/')).css('display','none');
+                image.attr('alt',el.attr('title'));
+                el.append(image);
+                return image;
+            },
+            titleAttr:'alt'
+        });
+        jQuery('.yoxview-container').yoxview();
+    });
+</script>
