@@ -2,8 +2,12 @@ from django import forms
 
 
 class EditPostForm(forms.Form):
+    id = forms.IntegerField(required=True)
     content = forms.CharField(label="Content", widget=forms.Textarea, required=True)
     title = forms.CharField(label="Title", required=False)
+    tags = forms.CharField(label="Tags", required=False)
+    location = forms.CharField(label="Location", required=False)
+    price = forms.IntegerField(label="Price", required=False)
     picture = forms.FileField(label="Picture", required=False)
 
 

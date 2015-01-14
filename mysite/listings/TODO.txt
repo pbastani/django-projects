@@ -1,4 +1,1 @@
-
-December 19, 2014
-
-- set up the Avalon template within listings app
+- form a ManyToMany relationship between Tag and Post

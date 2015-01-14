@@ -11,7 +11,7 @@ from .forms import \
     SigninForm, \
     EditPostForm
 
-from listings.models import Profile, Post
+from listings.models import Profile, Post, Tag
 
 import pdb
 
@@ -24,6 +24,8 @@ def frontend(request):
 @login_required()
 def my_posts(request):
     me = request.user
+
+    pdb.set_trace()
     posts = Post.objects.all().filter(user=me)
     context = {'posts': posts,
                'page_title': "View Post"}
@@ -42,13 +44,37 @@ def delete_post(request, post_id=0):
 def edit_post(request, post_id=0):
     errors = []
     me = request.user
+
+    post = Post()
+
     if request.method == 'POST':
         form = EditPostForm(request.POST, request.FILES)
         if form.is_valid():
             form_data = form.cleaned_data
+            post_id = form_data['id']
             title = form_data['title']
             content = form_data['content']
-            post = Post(user=me, title=title, content=content, create_date=datetime.today())
+            price = form_data['price']
+            location = form_data['location']
+            create_date = datetime.today()
+            tags = form_data['tags'].split(',')
+
+            if int(post_id) > 0:
+                post = Post.objects.get(id=int(post_id))
+
+            for tag in post.tags.all():
+                tag.delete()
+
+            for description in tags:
+                tag = Tag(post=post, description=description.lower().strip())
+                post.tags.add(tag)
+
+            post.user = me
+            post.title = title
+            post.content = content
+            post.location = location
+            post.price = price
+            post.create_date = create_date
 
             #if request.FILES:
             #    pictures = request.FILES['picture']
@@ -56,13 +82,14 @@ def edit_post(request, post_id=0):
             #    pdb.set_trace()
 
             post.save()
-            return HttpResponseRedirect('/listings/myposts/view/')
+        return HttpResponseRedirect('/listings/myposts/view/')
     else:
-        form = EditPostForm()
-        post = Post()
+
         if int(post_id) > 0:
             post = Post.objects.get(id=int(post_id))
 
+        pdb.set_trace()
+        form = EditPostForm()
         context = {'form': form,
                    'post': post,
                    'errors': errors,
@@ -71,15 +98,30 @@ def edit_post(request, post_id=0):
 
 
 def view_category(request, category=""):
-    context = {'category': 'General'}
     me = request.user
+    posts = Post.objects.all()
+
+    context = {'category': category,
+               'posts': posts}
     return render(request, 'listings/category.html', context)
 
 
+def view_tag(request, tag=""):
+    me = request.user
+    posts = Post.objects.all()
+
+    pdb.set_trace()
+    posts = Post.objects.all().filter(tag=tag)
+
+    context = {'tag': tag,
+               'posts': posts}
+    return render(request, 'listings/tag.html', context)
+
+
 def home(request):
-    context = {}
     me = request.user
     if me.is_authenticated():
+        context = {'display_name': me.first_name}
         return render(request, 'listings/admin/index.html', context)
     else:
         return HttpResponseRedirect('/listings/frontend/')
@@ -120,8 +162,8 @@ def signup(request):
             return redirect('/listings/')
 
     context = {'form': form,
-                    'errors': errors,
-                    'page_title': "Register"}
+               'errors': errors,
+               'page_title': "Register"}
     return render(request, 'listings/signup.html', context)
 
 
@@ -160,8 +202,8 @@ def signin(request):
         logged_in = False
         form = SigninForm()
         context = {'form': form,
-                        'logged_in': logged_in,
-                        'page_title': "Login"}
+                   'logged_in': logged_in,
+                   'page_title': "Login"}
         return render(request, 'listings/signin.html', context)
 
 

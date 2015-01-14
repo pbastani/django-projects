@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^frontend/$', views.frontend, name='frontend$'),
 
     url(r'^category/(?P<category>\w+)/$', views.view_category, name='view_category'),
+    url(r'^tag/(?P<tag>\w+)/$', views.view_tag, name='view_tag'),
 
     url(r'^myposts/view/$', views.my_posts, name='my_post'),
     url(r'^myposts/edit/(?P<post_id>\d*)/$', views.edit_post, name='edit_post'),

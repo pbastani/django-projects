@@ -1,14 +1,147 @@
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery('.square-thumb').nailthumb({
-            imageCustomFinder: function(el){
-                var image = $('<img />').attr('src',el.attr('href').replace('/full/','/small/')).css('display','none');
-                image.attr('alt',el.attr('title'));
-                el.append(image);
-                return image;
-            },
-            titleAttr:'alt'
-        });
-        jQuery('.yoxview-container').yoxview();
-    });
-</script>
+{% extends 'listings/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="container-fluid" style="margin-top: 20px;">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-2">
+                    <a href="/listings/category/general/" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-home"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Housing
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-heart"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Relationships
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-briefcase"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Jobs
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-group"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Events
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-book"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Lessons
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-money"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            For Sale
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-car"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Rideshare
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-futbol-o"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Sports
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-camera"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Gigs
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-paw"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Pets
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-cogs"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Services
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-2">
+                    <a href="#" class="shortcut-tiles tiles-brown">
+                        <div class="tiles-body">
+                            <div class="pull-left"><i class="fa fa-building-o"></i></div>
+                        </div>
+                        <div class="tiles-footer">
+                            Commercial
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> <!-- .container-fluid -->
+
+{% endblock %}
