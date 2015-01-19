@@ -11,9 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='tag',
-            name='post',
-            field=models.ManyToManyField(to='listings.Post'),
+        migrations.AddField(
+            model_name='post',
+            name='is_active',
+            field=models.BooleanField(default=False),
+            preserve_default=True,
         ),
     ]

@@ -5,19 +5,31 @@
 {% block content %}
 
     <div class="page-heading">
-        <h1>Add Post</h1>
+        <h1>
+            {{ post.id|yesno:'Update Post,New Post' }}
+        </h1>
     </div>
 
     <form role="form" method="post" class="form-horizontal col-md-offset-2 col-md-8" action="/listings/myposts/edit/0/" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="post-form">
+            <!-- buttons -->
+            <div class="row form-group-element">
+                <div class="col-md-offset-2 col-md-10">
+                    <ul class="post-btns pull-right">
+                        <li><button type="submit" class="btn btn-primary-alt"><i class="fa fa-floppy-o"></i> Save</button></li>
+                        <li><a href="#" class="btn btn-primary-alt"><i class="fa fa-trash-o"></i> Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+
             <input type="number" name="{{ form.id.name }}" value="{{ post.id }}" hidden="true">
 
             <!-- title -->
             <div class="row form-group-element">
                 <label for="{{ form.title.name }}" class="control-label col-md-2">{{ form.title.label }}</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control form-group-element" name="{{ form.title.name }}" placeholder="Untitled Post" value="{{ post.title }}">
+                    {{ form.title|addcss:"form-control form-group-element" }}
                 </div>
             </div>
 
@@ -25,7 +37,7 @@
             <div class="row form-group-element">
                 <label for="{{ form.content.name }}" class="control-label col-md-2">{{ form.content.label }}</label>
                 <div class="col-md-10">
-                    <textarea class="form-control form-group-element" rows="8" name="{{ form.content.name }}" placeholder="Post Content">{{ post.content }}</textarea>
+                    {{ form.content|addcss:"form-control form-group-element" }}
                 </div>
             </div>
 
@@ -33,7 +45,12 @@
             <div class="row form-group-element">
                 <label for="{{ form.tags.name }}" class="control-label col-md-2">{{ form.tags.label }}</label>
                 <div class="col-md-10">
-                    <input type="text" class="form-control form-group-element" name="{{ form.tags.name }}" placeholder="Tags">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-tags"></i>
+                        </span>
+                        {{ form.tags|addcss:"form-control form-group-element" }}
+                    </div>
                 </div>
             </div>
 
@@ -45,7 +62,7 @@
                         <span class="input-group-addon">
                             <i class="fa fa-dollar"></i>
                         </span>
-                        <input type="number" class="form-control form-group-element" name="{{ form.price.name }}" placeholder="Untitled Post" value="{{ post.price }}">
+                        {{ form.price|addcss:"form-control form-group-element" }}
                     </div>
                 </div>
             </div>
@@ -58,19 +75,22 @@
                         <span class="input-group-addon">
                             <i class="fa fa-map-marker"></i>
                         </span>
-                        <input type="text" class="form-control form-group-element" name="{{ form.location.name }}" value="{{ post.location }}">
+                        {{ form.location|addcss:"form-control form-group-element" }}
                     </div>
                 </div>
             </div>
 
-            <div class="form-group-element col-md-offset-2">
-                <button type="submit" class="btn btn-primary-alt btn-block">
-                    {% if not post.id %}
-                        Post
-                    {% else %}
-                        Save
-                    {% endif %}
-                </button>
+            <!-- Category -->
+            <div class="row form-group-element">
+                <label for="{{ form.category.name }}" class="control-label col-md-2">{{ form.category.label }}</label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-list-ul"></i>
+                        </span>
+                        {{ form.category|addcss:"form-control form-group-element" }}
+                    </div>
+                </div>
             </div>
         </div>
     </form>

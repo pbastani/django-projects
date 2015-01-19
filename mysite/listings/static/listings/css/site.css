@@ -1,3 +1,6 @@
+.hidden {
+    visibility: none;
+}
 .no-maring {
     margin: 0;
 }
@@ -12,4 +15,51 @@
 
 .edit-post-input {
     text-align: right;
+}
+
+.post-category-icon {
+    width: 120px;
+}
+
+.search-input {
+    color: rgb(200, 200, 200);
+    background: transparent;
+    border-color: darkseagreen;
+}
+
+.search-box {
+    padding: 10px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+textarea {
+    height: 4em;
+}
+
+ul.post-btns {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul.post-btns > li {
+    display: inline-block;
+}
+
+.active-listing {
+    background-color: #E8FFDD;
+}
+
+.inactive-listing {
+    background-color: palevioletred;
+}
+
+.heart {
+    color:mediumvioletred;
+}
+
+.post-panel {
+    padding: 20px;
 }

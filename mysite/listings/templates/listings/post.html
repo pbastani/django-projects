@@ -1,0 +1,51 @@
+{% extends 'listings/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li><a href="index.html">Listings</a></li>
+        <li><a href="/listings/posts/">Posts</a></li>
+    </ol>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2><i class="fa fa-anchor"></i>{{ post.title }}</h2>
+                        <div class="panel-ctrls">
+                            <a href="#" class="button-icon"><i class="fa fa-envelope"></i></a>
+                            <a href="#" class="button-icon"><i class="fa fa-heart"></i></a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        {{ post.content }}
+                    </div>
+                    <div class="panel-footer" style="padding: 10px 10px 10px 20px;">
+                        <table>
+                            <tr>
+                                <td class="pr30">
+                                    <i class="fa fa-dollar"></i> {{ post.price }}
+                                </td>
+                                <td class="pr30">
+                                    <i class="fa fa-map-marker"></i>
+                                    <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
+                                </td>
+                                <td class="pr30">
+                                    <i class="fa fa-tags"></i>
+                                    tag1, tag2
+                                </td>
+                                <td class="pr30">
+                                    <i class="fa fa-calendar"></i>
+                                    {{ post.create_date|date:"M. d, Y" }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

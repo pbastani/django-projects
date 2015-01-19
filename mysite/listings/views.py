@@ -4,31 +4,77 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+import datetime
 
 from .forms import \
     SignupForm, \
     SigninForm, \
-    EditPostForm
+    EditPostForm, \
+    SearchForm
 
 from listings.models import Profile, Post, Tag
 
 import pdb
 
 
+@login_required()
+def favorites_add(request, post_id=0):
+    return HttpResponseRedirect('/listings/')
+
+
+def view_post(request, post_id=0):
+    form = SearchForm({'search_string': ''})
+    post = None
+    if int(post_id) > 0:
+        post = Post.objects.get(id=int(post_id))
+
+    context = {'post': post,
+               'form': form,
+               'page_title': "Rosetti Listings"}
+    return render(request, 'listings/post.html', context)
+
+
 def frontend(request):
-    context = {}
+    posts = []
+    search_string = ''
+    form = SearchForm({'search_string': search_string})
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            search_string = form.cleaned_data['search_string']
+
+    tag = Tag.objects.filter(description=search_string)
+
+    if search_string == '':
+        posts = Post.objects.all()
+
+    if len(tag) > 0:
+        posts = tag[0].posts.all()
+
+    context = {'posts': posts,
+               'form': form,
+               'page_title': "Rosetti Listings"}
     return render(request, 'listings/index.html', context)
 
 
 @login_required()
 def my_posts(request):
     me = request.user
+    posts = Post.objects.filter(user=me).order_by('create_date')
 
-    pdb.set_trace()
-    posts = Post.objects.all().filter(user=me)
+    for post in posts:
+        if post.expiry_date < datetime.datetime.now():
+            post.is_active = False
+        else:
+            post.is_active = True
+
     context = {'posts': posts,
+               'today': datetime.datetime.today(),
+               'me': me,
                'page_title': "View Post"}
+
     return render(request, 'listings/admin/my_posts.html', context)
 
 
@@ -44,75 +90,103 @@ def delete_post(request, post_id=0):
 def edit_post(request, post_id=0):
     errors = []
     me = request.user
-
     post = Post()
 
     if request.method == 'POST':
-        form = EditPostForm(request.POST, request.FILES)
+        form = EditPostForm(request.POST)
+
         if form.is_valid():
-            form_data = form.cleaned_data
-            post_id = form_data['id']
-            title = form_data['title']
-            content = form_data['content']
-            price = form_data['price']
-            location = form_data['location']
-            create_date = datetime.today()
-            tags = form_data['tags'].split(',')
+            data = form.cleaned_data
+            post_id = data['id']
+            title = data['title']
+            content = data['content']
+            price = data['price']
+            location = data['location']
+            category = data['category']
+            create_date = datetime.datetime.today()
+            tag_descriptions = data['tags'].split(',')
 
             if int(post_id) > 0:
                 post = Post.objects.get(id=int(post_id))
 
-            for tag in post.tags.all():
-                tag.delete()
-
-            for description in tags:
-                tag = Tag(post=post, description=description.lower().strip())
-                post.tags.add(tag)
+            # for tag in post.tags.all():
+            #    tag.delete()
 
             post.user = me
             post.title = title
             post.content = content
-            post.location = location
             post.price = price
+            post.category = category
+            post.location = location
             post.create_date = create_date
-
-            #if request.FILES:
-            #    pictures = request.FILES['picture']
-            #    print("****** Read the pictures.")
-            #    pdb.set_trace()
-
+            post.expiry_date = create_date + datetime.timedelta(days=7)
             post.save()
+
+            for tag_description in tag_descriptions:
+                description = tag_description.lower().strip()
+                tags = Tag.objects.filter(description=description)
+
+                if description == '':
+                    tags.delete()
+                    continue
+
+                # if multiple tags with the same description exist delete all but the first
+                for i in range(1, len(tags)):
+                    tags[i].delete()
+
+                tag = Tag(description=description.lower().strip())
+                if len(tags) > 0:
+                    tag = tags[0]
+
+                tag.save()
+                tag.posts.add(post)
+
+                #if request.FILES:
+                #    pictures = request.FILES['picture']
+                #    print("****** Read the pictures.")
+
         return HttpResponseRedirect('/listings/myposts/view/')
     else:
 
+        data = {}
+        post_tags = []
         if int(post_id) > 0:
             post = Post.objects.get(id=int(post_id))
+            data['title'] = post.title
+            data['content'] = post.content
+            data['tags'] = ', '.join(str(item) for item in post.tags.all())
+            data['location'] = post.location
+            data['price'] = post.price
+            data['category'] = post.category
+        else:
+            post.id = 0
 
-        pdb.set_trace()
-        form = EditPostForm()
+        form = EditPostForm(data)
         context = {'form': form,
                    'post': post,
+                   'post_tags': post_tags,
                    'errors': errors,
+                   'me': me,
                    'page_title': "Add Post"}
         return render(request, 'listings/admin/edit_post.html', context)
 
 
 def view_category(request, category=""):
-    me = request.user
-    posts = Post.objects.all()
+    form = SearchForm({'search_string': ''})
+    posts = Post.objects.filter(category=category)
 
-    context = {'category': category,
-               'posts': posts}
-    return render(request, 'listings/category.html', context)
+    context = {'posts': posts,
+               'form': form,
+               'request_method': request.method,
+               'page_title': "Rosetti Listings"}
+
+    return render(request, 'listings/index.html', context)
 
 
 def view_tag(request, tag=""):
     me = request.user
     posts = Post.objects.all()
-
-    pdb.set_trace()
-    posts = Post.objects.all().filter(tag=tag)
-
+    posts = Post.objects.filter(tag=tag)
     context = {'tag': tag,
                'posts': posts}
     return render(request, 'listings/tag.html', context)
@@ -120,6 +194,7 @@ def view_tag(request, tag=""):
 
 def home(request):
     me = request.user
+
     if me.is_authenticated():
         context = {'display_name': me.first_name}
         return render(request, 'listings/admin/index.html', context)
@@ -132,10 +207,10 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(data=request.POST)
         if form.is_valid():
-            form_data = form.cleaned_data
-            display_name = form_data['display_name']
-            email = form_data['email']
-            password = form_data['password']
+            data = form.cleaned_data
+            display_name = data['display_name']
+            email = data['email']
+            password = data['password']
             username = email.split("@")
 
             if len(username) != 2:
@@ -163,7 +238,7 @@ def signup(request):
 
     context = {'form': form,
                'errors': errors,
-               'page_title': "Register"}
+               'page_title': "Sign Up"}
     return render(request, 'listings/signup.html', context)
 
 
@@ -175,9 +250,9 @@ def signin(request):
     if request.method == 'POST':
         form = SigninForm(data=request.POST)
         if form.is_valid():
-            form_data = form.cleaned_data
+            data = form.cleaned_data
 
-            email = form_data['email']
+            email = data['email']
             user_by_email = User.objects.filter(email=email)
 
             if user_by_email.count() == 0:
@@ -189,7 +264,7 @@ def signin(request):
                 if me:
                     if me.is_active:
                         login(request, me)
-                        me.profile.last_online = datetime.today()
+                        me.profile.last_online = datetime.datetime.today()
                         me.save()
                         return HttpResponseRedirect('/listings/')
                     else:
@@ -203,11 +278,10 @@ def signin(request):
         form = SigninForm()
         context = {'form': form,
                    'logged_in': logged_in,
-                   'page_title': "Login"}
+                   'page_title': "Sign In"}
         return render(request, 'listings/signin.html', context)
 
 
 def signout(request):
-    pdb.set_trace()
     logout(request)
     return HttpResponseRedirect('/listings/')

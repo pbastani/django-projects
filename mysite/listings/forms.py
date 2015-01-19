@@ -1,14 +1,32 @@
 from django import forms
+from listings.models import Post
+
+
+class SearchForm(forms.Form):
+    search_string = forms.CharField(label="Search", required=False)
 
 
 class EditPostForm(forms.Form):
-    id = forms.IntegerField(required=True)
-    content = forms.CharField(label="Content", widget=forms.Textarea, required=True)
+    id = forms.IntegerField(required=False)
     title = forms.CharField(label="Title", required=False)
+    content = forms.CharField(label="Content", widget=forms.Textarea, required=True)
     tags = forms.CharField(label="Tags", required=False)
     location = forms.CharField(label="Location", required=False)
     price = forms.IntegerField(label="Price", required=False)
-    picture = forms.FileField(label="Picture", required=False)
+
+    GENERAL = 'general'
+    FORSALE = 'forsale'
+    SERVICES = 'services'
+    HOUSING = 'housing'
+    CATEGORIES = (
+        (GENERAL, 'General'),
+        (FORSALE, 'For Sale'),
+        (SERVICES, 'Services'),
+        (HOUSING, 'Housing'),
+    )
+    category = forms.ChoiceField(
+        label="Category",
+        choices=CATEGORIES)
 
 
 class SignupForm(forms.Form):
@@ -16,7 +34,7 @@ class SignupForm(forms.Form):
         label="Password",
         widget=forms.PasswordInput(),
         required=True,
-    )
+        )
     display_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
 
@@ -26,5 +44,5 @@ class SigninForm(forms.Form):
         label="Password",
         widget=forms.PasswordInput(),
         required=True,
-    )
+        )
     email = forms.EmailField()

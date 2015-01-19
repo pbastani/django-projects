@@ -7,6 +7,8 @@ urlpatterns = [
 
     url(r'^category/(?P<category>\w+)/$', views.view_category, name='view_category'),
     url(r'^tag/(?P<tag>\w+)/$', views.view_tag, name='view_tag'),
+    url(r'^post/(?P<post_id>\w+)/$', views.view_post, name='view_post'),
+    url(r'^favorites/add/(?P<post_id>\w+)/$', views.favorites_add, name='favorites_add'),
 
     url(r'^myposts/view/$', views.my_posts, name='my_post'),
     url(r'^myposts/edit/(?P<post_id>\d*)/$', views.edit_post, name='edit_post'),
