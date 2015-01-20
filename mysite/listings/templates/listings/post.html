@@ -4,7 +4,7 @@
 {% block content %}
 
     <ol class="breadcrumb">
-        <li><a href="index.html">Listings</a></li>
+        <li><a href="/listings/">Listings</a></li>
         <li><a href="/listings/posts/">Posts</a></li>
     </ol>
     <div class="container-fluid">
@@ -15,7 +15,9 @@
                         <h2><i class="fa fa-anchor"></i>{{ post.title }}</h2>
                         <div class="panel-ctrls">
                             <a href="#" class="button-icon"><i class="fa fa-envelope"></i></a>
-                            <a href="#" class="button-icon"><i class="fa fa-heart"></i></a>
+                            {% if user.is_authenticated %}
+                            <a href="/listings/favorites/add/{{ post.id }}" class="button-icon"><i class="fa fa-heart"></i></a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="panel-body">

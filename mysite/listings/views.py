@@ -34,7 +34,7 @@ def view_post(request, post_id=0):
     return render(request, 'listings/post.html', context)
 
 
-def frontend(request):
+def search(request):
     posts = []
     search_string = ''
     form = SearchForm({'search_string': search_string})
@@ -56,7 +56,7 @@ def frontend(request):
     context = {'posts': posts,
                'form': form,
                'page_title': "Rosetti Listings"}
-    return render(request, 'listings/index.html', context)
+    return render(request, 'listings/search.html', context)
 
 
 @login_required()
@@ -193,13 +193,18 @@ def view_tag(request, tag=""):
 
 
 def home(request):
-    me = request.user
+    search_string = ''
+    form = SearchForm({'search_string': search_string})
+    context = {'form': form,
+               'page_title': 'Rosetti Listings'}
+    return render(request, 'listings/index.html', context)
 
-    if me.is_authenticated():
-        context = {'display_name': me.first_name}
-        return render(request, 'listings/admin/index.html', context)
-    else:
-        return HttpResponseRedirect('/listings/frontend/')
+
+@login_required()
+def dashboard(request):
+    me = request.user
+    context = {}
+    return render(request, 'listings/admin/index.html', context)
 
 
 def signup(request):
