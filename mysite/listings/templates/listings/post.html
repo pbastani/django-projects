@@ -16,37 +16,40 @@
                         <div class="panel-ctrls">
                             <a href="#" class="button-icon"><i class="fa fa-envelope"></i></a>
                             {% if user.is_authenticated %}
-                            <a href="/listings/favorites/add/{{ post.id }}" class="button-icon"><i class="fa fa-heart"></i></a>
+                                <a href="/listings/favorites/add/{{ post.id }}" class="button-icon"><i class="fa fa-heart"></i></a>
                             {% endif %}
                         </div>
                     </div>
                     <div class="panel-body">
                         {{ post.content }}
                     </div>
-                    <div class="panel-footer" style="padding: 10px 10px 10px 20px;">
-                        <table>
-                            <tr>
-                                <td class="pr30">
-                                    <i class="fa fa-dollar"></i> {{ post.price }}
-                                </td>
-                                <td class="pr30">
-                                    <i class="fa fa-map-marker"></i>
-                                    <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
-                                </td>
-                                <td class="pr30">
-                                    <i class="fa fa-tags"></i>
-                                    tag1, tag2
-                                </td>
-                                <td class="pr30">
-                                    <i class="fa fa-calendar"></i>
-                                    {{ post.create_date|date:"M. d, Y" }}
-                                </td>
-                            </tr>
-                        </table>
+                    <div class="panel-footer p10">
+                        <div class="row pl10">
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-dollar"></i> {{ post.price }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-calendar"></i>
+                                {{ post.create_date|date:"M. d, Y" }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-map-marker"></i>
+                                <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
+                            </div>
+                        </div>
+                        <div class="row pl5">
+                        <div class="pt10">
+                            {% for tag in tags %}
+                                <a href="/listings/tag/{{ tag.split|join:'-' }}/">​​
+                                    <span class="label label-inverse"><i class="fa fa-tag"></i> {{ tag }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 

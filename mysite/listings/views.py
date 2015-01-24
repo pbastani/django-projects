@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
+from itertools import chain
 
 from .forms import \
     SignupForm, \
@@ -28,15 +29,48 @@ def view_post(request, post_id=0):
     if int(post_id) > 0:
         post = Post.objects.get(id=int(post_id))
 
+    tags = []
+    for tag in post.tags.all():
+        tags.append(tag.description)
+
     context = {'post': post,
+               'tags': tags,
                'form': form,
                'page_title': "Rosetti Listings"}
     return render(request, 'listings/post.html', context)
 
 
-def search(request):
+def view_category(request, category=""):
+    form = SearchForm({'search_string': ''})
+    posts = Post.objects.filter(category=category)
+
+    context = {'posts': posts,
+               'form': form,
+               'request_method': request.method,
+               'page_title': "Rosetti Listings"}
+
+    return render(request, 'listings/index.html', context)
+
+
+def view_tag(request, tag=""):
+    tag = tag.replace('-', ' ')
     posts = []
-    search_string = ''
+    form = SearchForm({'search_string': ''})
+    tags = Tag.objects.filter(description=tag)
+
+    if len(tags) == 1:
+        posts = tags[0].posts.all()
+
+    context = {'tag': tag,
+               'form': form,
+               'posts': posts,
+               'page_title': 'Rosetti Listings'}
+    return render(request, 'listings/tag.html', context)
+
+
+def search(request, search_string=""):
+    posts = []
+    search_string = search_string.replace('-', ' ')
     form = SearchForm({'search_string': search_string})
 
     if request.method == 'POST':
@@ -45,16 +79,17 @@ def search(request):
         if form.is_valid():
             search_string = form.cleaned_data['search_string']
 
-    tag = Tag.objects.filter(description=search_string)
-
     if search_string == '':
         posts = Post.objects.all()
-
-    if len(tag) > 0:
-        posts = tag[0].posts.all()
+    else:
+        tag = Tag.objects.filter(description=search_string)
+        posts_by_tag = tag[0].posts.all() if tag else []
+        posts_by_title = Post.objects.filter(title__contains=search_string)
+        posts = sorted(set(chain(posts_by_tag, posts_by_title)), key=lambda x: x.title)
 
     context = {'posts': posts,
                'form': form,
+               'search_string': search_string,
                'page_title': "Rosetti Listings"}
     return render(request, 'listings/search.html', context)
 
@@ -103,6 +138,7 @@ def edit_post(request, post_id=0):
             price = data['price']
             location = data['location']
             category = data['category']
+            # create_date = datetime.date(2014, 11, 5)
             create_date = datetime.datetime.today()
             tag_descriptions = data['tags'].split(',')
 
@@ -118,8 +154,9 @@ def edit_post(request, post_id=0):
             post.price = price
             post.category = category
             post.location = location
-            post.create_date = create_date
-            post.expiry_date = create_date + datetime.timedelta(days=7)
+            if post_id == 0:
+                post.create_date = create_date
+                post.expiry_date = create_date + datetime.timedelta(days=7)
             post.save()
 
             for tag_description in tag_descriptions:
@@ -171,27 +208,6 @@ def edit_post(request, post_id=0):
         return render(request, 'listings/admin/edit_post.html', context)
 
 
-def view_category(request, category=""):
-    form = SearchForm({'search_string': ''})
-    posts = Post.objects.filter(category=category)
-
-    context = {'posts': posts,
-               'form': form,
-               'request_method': request.method,
-               'page_title': "Rosetti Listings"}
-
-    return render(request, 'listings/index.html', context)
-
-
-def view_tag(request, tag=""):
-    me = request.user
-    posts = Post.objects.all()
-    posts = Post.objects.filter(tag=tag)
-    context = {'tag': tag,
-               'posts': posts}
-    return render(request, 'listings/tag.html', context)
-
-
 def home(request):
     search_string = ''
     form = SearchForm({'search_string': search_string})
@@ -203,7 +219,7 @@ def home(request):
 @login_required()
 def dashboard(request):
     me = request.user
-    context = {}
+    context = {'me': me}
     return render(request, 'listings/admin/index.html', context)
 
 
