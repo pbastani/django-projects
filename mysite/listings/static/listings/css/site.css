@@ -63,3 +63,8 @@ ul.post-btns > li {
 .post-panel {
     padding: 20px;
 }
+
+.post-pictures {
+    height: 200px;
+    padding: 5px;
+}

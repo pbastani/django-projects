@@ -11,9 +11,10 @@ from .forms import \
     SignupForm, \
     SigninForm, \
     EditPostForm, \
-    SearchForm
+    SearchForm, \
+    UploadPhotosForm
 
-from listings.models import Profile, Post, Tag
+from listings.models import Profile, Post, Tag, Picture
 
 import pdb
 
@@ -178,11 +179,9 @@ def edit_post(request, post_id=0):
                 tag.save()
                 tag.posts.add(post)
 
-                #if request.FILES:
-                #    pictures = request.FILES['picture']
-                #    print("****** Read the pictures.")
-
-        return HttpResponseRedirect('/listings/myposts/view/')
+            return HttpResponseRedirect('/listings/myposts/upload/'+str(post.id)+'/')
+        else:
+            return HttpResponseRedirect('/listings/myposts/view/')
     else:
 
         data = {}
@@ -206,6 +205,34 @@ def edit_post(request, post_id=0):
                    'me': me,
                    'page_title': "Add Post"}
         return render(request, 'listings/admin/edit_post.html', context)
+
+
+@login_required()
+def upload_photos(request, post_id=0):
+    context = {}
+
+    post_id = int(post_id)
+    post = Post.objects.get(id=post_id) if post_id > 0 else []
+    pictures = post.pictures if post else []
+
+    if request.method == 'POST':
+        position = len(pictures.all())
+        for file in request.FILES.getlist('pictures'):
+            print("###### Adding photo #"+repr(position))
+            photo = Picture(post=post,
+                            file=file,
+                            title="Untitled",
+                            upload_date=datetime.datetime.now(),
+                            position=position)
+            pictures.add(photo)
+            position += 1
+
+    form = UploadPhotosForm()
+    context = {'post_id': post_id,
+               'pictures': pictures.all(),
+               'form': form,
+               'page_title': 'Upload Photos'}
+    return render(request, 'listings/admin/upload_photos.html', context)
 
 
 def home(request):

@@ -6,6 +6,11 @@ class SearchForm(forms.Form):
     search_string = forms.CharField(label="Search", required=False)
 
 
+class UploadPhotosForm(forms.Form):
+    id = forms.IntegerField(required=False)
+    photos = forms.FileField(label="Upload Photos", required=False)
+
+
 class EditPostForm(forms.Form):
     id = forms.IntegerField(required=False)
     title = forms.CharField(label="Title", required=False)

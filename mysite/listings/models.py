@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from sorl.thumbnail import ImageField
 import datetime
 
 
@@ -45,7 +46,10 @@ class Post(models.Model):
 
 class Picture(models.Model):
     post = models.ForeignKey(Post, related_name='pictures')
-    file = models.ImageField(upload_to='listing_images/%Y/%m/%d', default="")
+    file = ImageField(upload_to='listing_images/%Y/%m/%d', default="")
+    title = models.CharField(max_length=50, default="")
+    upload_date = models.DateField('Uploaded On')
+    position = models.IntegerField(default=0)
 
     def __str__(self):
         return self.file.url

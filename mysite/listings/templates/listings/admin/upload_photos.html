@@ -1,0 +1,80 @@
+{% extends 'listings/admin/base.html' %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load listings_tags %}
+
+{% block content %}
+
+    <div class="page-heading">
+        <h1>
+            Upload Photos
+        </h1>
+    </div>
+
+    <form role="form"
+          method="post"
+          class="form-horizontal col-md-offset-2 col-md-8"
+          action="/listings/myposts/upload/{{ post_id }}/"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+        <div class="post-form">
+            <input type="number" name="{{ form.id.name }}" value="{{ post_id }}" hidden="true">
+
+            <div class="input-group pl5" style="width: 625px;">
+                <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file btn-sm">
+                        Browse&hellip; <input type="file" name="pictures" multiple>
+                    </span>
+                </span>
+                <input type="text" class="form-control input-sm" readonly>
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary-alt btn-sm"><i class="fa fa-refresh"></i> Refresh</button>
+                </span>
+            </div>
+        </div>
+
+        {% if pictures.count > 0 %}
+            {% for picture in pictures %}
+                {% thumbnail picture.file "200x200" crop="center" as im %}
+                    <div class="p5 pull-left">
+                        <div>
+                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        </div>
+                        <div class="btn-group mb10" data-toggle="buttons">
+                            <label class="btn btn-danger-alt btn-xs mr5">
+                                <input type="checkbox"><i class="fa fa-trash"></i>
+                            </label>
+                            Uploaded on: {{ picture.upload_date|date:"M. d, Y" }}
+                        </div>
+                    </div>
+                {% endthumbnail %}
+            {% endfor %}
+        {% endif %}
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).on('change', '.btn-file :file', function() {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $(document).ready( function() {
+            $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+                if( input.length ) {
+                    input.val(log);
+                } else {
+                    if( log ) alert(log);
+                }
+            });
+        });
+    </script>
+{% endblock %}

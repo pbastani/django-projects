@@ -115,8 +115,6 @@ def upload_photos(request):
                           upload_date=datetime.now(),
                           position=position)
             photos.add(photo)
-
-            pdb.set_trace()
             position += 1
 
         return HttpResponseRedirect(reverse('portfolio:home'))
@@ -231,7 +229,6 @@ def my_connections(request):
     followers = me.profile.followers.all()
     followees = me.profile.followees.all()
 
-    pdb.set_trace()
     context = {'page_title': "Profile",
                'followers': followers,
                'followees': followees,
