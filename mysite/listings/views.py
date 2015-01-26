@@ -208,9 +208,17 @@ def edit_post(request, post_id=0):
 
 
 @login_required()
-def upload_photos(request, post_id=0):
-    context = {}
+def publish_post(request, post_id=0):
+    post_id = int(post_id)
+    post = Post.objects.get(id=post_id) if post_id > 0 else []
+    context = {
+        'post': post
+    }
+    return render(request, 'listings/admin/publish_post.html', context)
 
+
+@login_required()
+def upload_photos(request, post_id=0):
     post_id = int(post_id)
     post = Post.objects.get(id=post_id) if post_id > 0 else []
     pictures = post.pictures if post else []
@@ -226,6 +234,11 @@ def upload_photos(request, post_id=0):
                             position=position)
             pictures.add(photo)
             position += 1
+
+        for id_str in request.POST.getlist('old_pic_delete'):
+            picture_id = int(id_str)
+            pic_to_delete = Picture.objects.get(id=picture_id)
+            pic_to_delete.delete()
 
     form = UploadPhotosForm()
     context = {'post_id': post_id,

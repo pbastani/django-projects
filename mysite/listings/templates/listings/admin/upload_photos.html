@@ -1,7 +1,6 @@
 {% extends 'listings/admin/base.html' %}
 {% load thumbnail %}
 {% load staticfiles %}
-{% load listings_tags %}
 
 {% block content %}
 
@@ -21,37 +20,47 @@
         <div class="post-form">
             <input type="number" name="{{ form.id.name }}" value="{{ post_id }}" hidden="true">
 
-            <div class="input-group pl5" style="width: 625px;">
+            <div class="pull-left" style="width: 100%;">
+                <div class="input-group">
                 <span class="input-group-btn">
                     <span class="btn btn-primary btn-file btn-sm">
-                        Browse&hellip; <input type="file" name="pictures" multiple>
+                        <i class="fa fa-folder-open"></i> Browse <input type="file" name="pictures" multiple style="width: 100%;">
                     </span>
                 </span>
-                <input type="text" class="form-control input-sm" readonly>
+                    <input type="text" class="form-control input-sm" readonly>
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-primary-alt btn-sm"><i class="fa fa-refresh"></i> Refresh</button>
+                    <a href="/listings/myposts/publish/{{ post_id }}/" class="btn btn-primary-alt btn-sm"><i class="fa fa-caret-right"></i> Continue</a>
                 </span>
+                </div>
             </div>
         </div>
 
         {% if pictures.count > 0 %}
-            {% for picture in pictures %}
-                {% thumbnail picture.file "200x200" crop="center" as im %}
-                    <div class="p5 pull-left">
-                        <div>
-                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            <div class="pl10 pt50">
+                {% for picture in pictures %}
+                    <input type="number" name="{{ 'old_pic' }}" value="{{ post.id }}" hidden="true">
+                    {% thumbnail picture.file "200x200" crop="center" as im %}
+                        <div class="pr10 pull-left">
+                            <div>
+                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                            </div>
+                            <div class="btn-group mb10 mt5" data-toggle="buttons">
+                                <label class="btn btn-danger-alt btn-xs btn-label mr5">
+                                    <input type="checkbox" name="old_pic_delete" value="{{ picture.id }}">
+                                    <i class="fa fa-trash"></i> Delete
+                                </label>
+                            </div>
+                            <i class="fa fa-cloud-upload"></i> {{ picture.upload_date|date:"M. d, Y" }}
                         </div>
-                        <div class="btn-group mb10" data-toggle="buttons">
-                            <label class="btn btn-danger-alt btn-xs mr5">
-                                <input type="checkbox"><i class="fa fa-trash"></i>
-                            </label>
-                            Uploaded on: {{ picture.upload_date|date:"M. d, Y" }}
-                        </div>
-                    </div>
-                {% endthumbnail %}
-            {% endfor %}
+                    {% endthumbnail %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info mt50">
+                <p>No pictures uploaded.</p>
+            </div>
         {% endif %}
-        </div>
     </form>
 
 {% endblock %}

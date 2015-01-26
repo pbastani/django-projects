@@ -38,18 +38,18 @@
                             </div>
                         </div>
                         <div class="row pl5">
-                        <div class="pt10">
-                            {% for tag in tags %}
-                                <a href="/listings/tag/{{ tag.split|join:'-' }}/">​​
-                                    <span class="label label-inverse"><i class="fa fa-tag"></i> {{ tag }}</span>
-                                </a>
-                            {% endfor %}
+                            <div class="pt10">
+                                {% for tag in tags %}
+                                    <a href="/listings/tag/{{ tag.split|join:'-' }}/">​​
+                                        <span class="label label-inverse"><i class="fa fa-tag"></i> {{ tag }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
 

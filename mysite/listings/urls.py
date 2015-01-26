@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^myposts/edit/(?P<post_id>\d*)/$', views.edit_post, name='edit_post'),
     url(r'^myposts/upload/(?P<post_id>\d+)/$', views.upload_photos, name='upload_photos'),
     url(r'^myposts/delete/(?P<post_id>\d*)/$', views.delete_post, name='delete_post'),
+    url(r'^myposts/publish/(?P<post_id>\d*)/$', views.publish_post, name='publish_post'),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^signin/$', views.signin, name='signin'),
     url(r'^signout/$', views.signout, name='signout'),

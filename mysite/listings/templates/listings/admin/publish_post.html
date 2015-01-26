@@ -1,0 +1,77 @@
+{% extends 'listings/admin/base.html' %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load listings_tags %}
+
+{% block css %}
+    <link href="{% static 'listings/assets/css/lightbox.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <h1>
+            Publish Post
+        </h1>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2><i class="fa fa-anchor"></i>{{ post.title }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ post.content }}
+
+                        {% if post.pictures.all.count > 0 %}
+
+                            <div class="image-row">
+                                <div class="image-set">
+                                    <div class="pl10 pt50">
+                                        {% for picture in post.pictures.all %}
+                                            <input type="number" name="{{ 'old_pic' }}" value="{{ post.id }}" hidden="true">
+                                            {% thumbnail picture.file "1000" as big %}
+                                                {% thumbnail picture.file "100x100" crop="center" as im %}
+                                                    <div class="pr10 pull-left">
+                                                        <div>
+                                                            <a class="example-image-link" href="{{ big.url }}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+                                                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                {% endthumbnail %}
+                                            {% endthumbnail %}
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="panel-footer p10">
+                        <div class="row pl10">
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-dollar"></i> {{ post.price }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-calendar"></i>
+                                {{ post.create_date|date:"M. d, Y" }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-map-marker"></i>
+                                <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{{% block js %}
+    <script src="{% static 'listings/assets/js/lightbox.js' %}"></script>
+{% endblock %}
