@@ -1,0 +1,254 @@
+{% extends 'listings/admin/base.html' %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load listings_tags %}
+
+{% block css %}
+    <link href="{% static 'listings/assets/css/lightbox.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'listings/assets/fancybox/jquery.fancybox.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'listings/assets/fancybox/helpers/jquery.fancybox-thumbs.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <h1>
+            Publish Post
+        </h1>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h2><i class="fa fa-anchor"></i>{{ post.title }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ post.content }}
+                        <div class="mt10">
+                            {% if post.pictures.all.count > 0 %}
+                                {% for picture in post.pictures.all %}
+                                    {% thumbnail picture.file "1000" as big %}
+                                        {% thumbnail picture.file "50x50" crop="center" as im %}
+                                            <a class="fancybox" href="{{ big.url }}" data-fancybox-group="gallery" title="Lorem ipsum dolor sit amet">
+                                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"/>
+                                            </a>
+                                        {% endthumbnail %}
+                                    {% endthumbnail %}
+                                {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="panel-footer p10">
+                        <div class="row pl10">
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-dollar"></i> {{ post.price }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-calendar"></i>
+                                {{ post.create_date|date:"M. d, Y" }}
+                            </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-map-marker"></i>
+                                <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group pull-right">
+                    <a href="/listings/myposts/edit/{{ post.id }}/" class="btn btn-primary-alt btn-sm"><i class="fa fa-pencil"></i> Edit Text</a>
+                    <a href="/listings/myposts/upload/{{ post.id }}/" class="btn btn-primary-alt btn-sm"><i class="fa fa-picture-o"></i> Edit Pictures</a>
+                    <a href="/listings/myposts/publish/{{ post.id }}/" class="btn btn-primary-alt btn-sm"><i class="fa fa-ok"></i> Publish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{{% block js %}
+    <script src="{% static 'listings/assets/js/lightbox.js' %}"></script>
+
+    <script src="{% static 'listings/assets/js/jquery.mousewheel-3.0.6.pack.js' %}"></script>
+    <script src="{% static 'listings/assets/fancybox/jquery.fancybox.js' %}"></script>
+    <script src="{% static 'listings/assets/fancybox/helpers/jquery.fancybox-thumbs.js' %}"></script>
+    <script src="{% static 'listings/assets/fancybox/helpers/jquery.fancybox-media.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /*
+             *  Simple image gallery. Uses default settings
+             */
+
+            $('.fancybox').fancybox();
+
+            /*
+             *  Different effects
+             */
+
+            // Change title type, overlay closing speed
+            $(".fancybox-effects-a").fancybox({
+                helpers: {
+                    title : {
+                        type : 'outside'
+                    },
+                    overlay : {
+                        speedOut : 0
+                    }
+                }
+            });
+
+            // Disable opening and closing animations, change title type
+            $(".fancybox-effects-b").fancybox({
+                openEffect  : 'none',
+                closeEffect	: 'none',
+
+                helpers : {
+                    title : {
+                        type : 'over'
+                    }
+                }
+            });
+
+            // Set custom style, close if clicked, change title type and overlay color
+            $(".fancybox-effects-c").fancybox({
+                wrapCSS    : 'fancybox-custom',
+                closeClick : true,
+
+                openEffect : 'none',
+
+                helpers : {
+                    title : {
+                        type : 'inside'
+                    },
+                    overlay : {
+                        css : {
+                            'background' : 'rgba(238,238,238,0.85)'
+                        }
+                    }
+                }
+            });
+
+            // Remove padding, set opening and closing animations, close if clicked and disable overlay
+            $(".fancybox-effects-d").fancybox({
+                padding: 0,
+
+                openEffect : 'elastic',
+                openSpeed  : 150,
+
+                closeEffect : 'elastic',
+                closeSpeed  : 150,
+
+                closeClick : true,
+
+                helpers : {
+                    overlay : null
+                }
+            });
+
+            /*
+             *  Button helper. Disable animations, hide close button, change title type and content
+             */
+
+            $('.fancybox-buttons').fancybox({
+                openEffect  : 'none',
+                closeEffect : 'none',
+
+                prevEffect : 'none',
+                nextEffect : 'none',
+
+                closeBtn  : false,
+
+                helpers : {
+                    title : {
+                        type : 'inside'
+                    },
+                    buttons	: {}
+                },
+
+                afterLoad : function() {
+                    this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
+                }
+            });
+
+
+            /*
+             *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
+             */
+
+            $('.fancybox-thumbs').fancybox({
+                prevEffect : 'none',
+                nextEffect : 'none',
+
+                closeBtn  : false,
+                arrows    : false,
+                nextClick : true,
+
+                helpers : {
+                    thumbs : {
+                        width  : 50,
+                        height : 50
+                    }
+                }
+            });
+
+            /*
+             *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
+             */
+            $('.fancybox-media')
+                    .attr('rel', 'media-gallery')
+                    .fancybox({
+                        openEffect : 'none',
+                        closeEffect : 'none',
+                        prevEffect : 'none',
+                        nextEffect : 'none',
+
+                        arrows : false,
+                        helpers : {
+                            media : {},
+                            buttons : {}
+                        }
+                    });
+
+            /*
+             *  Open manually
+             */
+
+            $("#fancybox-manual-a").click(function() {
+                $.fancybox.open('1_b.jpg');
+            });
+
+            $("#fancybox-manual-b").click(function() {
+                $.fancybox.open({
+                    href : 'iframe.html',
+                    type : 'iframe',
+                    padding : 5
+                });
+            });
+
+            $("#fancybox-manual-c").click(function() {
+                $.fancybox.open([
+                    {
+                        href : '1_b.jpg',
+                        title : 'My title'
+                    }, {
+                        href : '2_b.jpg',
+                        title : '2nd title'
+                    }, {
+                        href : '3_b.jpg'
+                    }
+                ], {
+                    helpers : {
+                        thumbs : {
+                            width: 75,
+                            height: 50
+                        }
+                    }
+                });
+            });
+
+
+        });
+    </script>
+{% endblock %}
