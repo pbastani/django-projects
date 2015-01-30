@@ -2,6 +2,10 @@
 {% load thumbnail %}
 {% load staticfiles %}
 
+{% block css %}
+    <link href="{% static 'listings/assets/fancybox/jquery.fancybox.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
     <div class="page-heading">
@@ -39,19 +43,21 @@
         {% if pictures.count > 0 %}
             <div class="pl10 pt50">
                 {% for picture in pictures %}
-                    <input type="number" name="{{ 'old_pic' }}" value="{{ post.id }}" hidden="true">
-                    {% thumbnail picture.file "200x200" crop="center" as im %}
+                    {% thumbnail picture.file "1000" as big %}
                         <div class="pr10 pull-left">
-                            <div>
-                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                            </div>
-                            <div class="btn-group mb10 mt5" data-toggle="buttons">
-                                <label class="btn btn-danger-alt btn-xs btn-label mr5">
-                                    <input type="checkbox" name="old_pic_delete" value="{{ picture.id }}">
-                                    <i class="fa fa-trash"></i> Delete
-                                </label>
-                            </div>
-                            <i class="fa fa-cloud-upload"></i> {{ picture.upload_date|date:"M. d, Y" }}
+                        <div>
+                            {% thumbnail picture.file "70x70" crop="center" as im %}
+                                <a class="fancybox" href="{{ big.url }}" data-fancybox-group="gallery" title="Lorem ipsum dolor sit amet">
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"/>
+                                </a>
+                            {% endthumbnail %}
+                        </div>
+                        <div class="btn-group mb10 mt5" data-toggle="buttons">
+                            <label class="btn btn-danger-alt btn-xs btn-label">
+                                <input type="checkbox" name="old_pic_delete" value="{{ picture.id }}">
+                                <i class="fa fa-trash"></i> Delete
+                            </label>
+                        </div>
                         </div>
                     {% endthumbnail %}
                 {% endfor %}
@@ -66,6 +72,8 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'listings/assets/fancybox/jquery.fancybox.js' %}"></script>
+
     <script>
         $(document).on('change', '.btn-file :file', function() {
             var input = $(this),
@@ -75,6 +83,8 @@
         });
 
         $(document).ready( function() {
+            $('.fancybox').fancybox();
+
             $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
                 var input = $(this).parents('.input-group').find(':text'),
                         log = numFiles > 1 ? numFiles + ' files selected' : label;

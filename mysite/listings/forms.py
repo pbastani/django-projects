@@ -2,8 +2,20 @@ from django import forms
 from listings.models import Post
 
 
+GENERAL = 'general'
+FORSALE = 'forsale'
+SERVICES = 'services'
+HOUSING = 'housing'
+CATEGORIES = (
+    (GENERAL, 'General'),
+    (FORSALE, 'For Sale'),
+    (SERVICES, 'Services'),
+    (HOUSING, 'Housing'))
+
+
 class SearchForm(forms.Form):
     search_string = forms.CharField(label="Search", required=False)
+    category = forms.ChoiceField(label="Category", choices=CATEGORIES)
 
 
 class UploadPhotosForm(forms.Form):
@@ -18,20 +30,7 @@ class EditPostForm(forms.Form):
     tags = forms.CharField(label="Tags", required=False)
     location = forms.CharField(label="Location", required=False)
     price = forms.IntegerField(label="Price", required=False)
-
-    GENERAL = 'general'
-    FORSALE = 'forsale'
-    SERVICES = 'services'
-    HOUSING = 'housing'
-    CATEGORIES = (
-        (GENERAL, 'General'),
-        (FORSALE, 'For Sale'),
-        (SERVICES, 'Services'),
-        (HOUSING, 'Housing'),
-    )
-    category = forms.ChoiceField(
-        label="Category",
-        choices=CATEGORIES)
+    category = forms.ChoiceField(label="Category", choices=CATEGORIES)
 
 
 class SignupForm(forms.Form):

@@ -79,19 +79,18 @@ def search(request, search_string=""):
 
         if form.is_valid():
             search_string = form.cleaned_data['search_string']
+            category = form.cleaned_data['category']
 
-    if search_string == '':
-        posts = Post.objects.all()
-    else:
-        tag = Tag.objects.filter(description=search_string)
-        posts_by_tag = tag[0].posts.all() if tag else []
-        posts_by_title = Post.objects.filter(title__contains=search_string)
-        posts = sorted(set(chain(posts_by_tag, posts_by_title)), key=lambda x: x.title)
+    tag = Tag.objects.filter(description=search_string)
+    posts_by_tag = tag[0].posts.filter(category=category) if tag else []
+    posts_by_title = Post.objects.filter(title__contains=search_string)
+    posts = sorted(set(chain(posts_by_tag, posts_by_title)), key=lambda x: x.title)
 
     context = {'posts': posts,
                'form': form,
                'search_string': search_string,
                'page_title': "Rosetti Listings"}
+
     return render(request, 'listings/search.html', context)
 
 

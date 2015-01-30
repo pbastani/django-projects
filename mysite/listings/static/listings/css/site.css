@@ -5,12 +5,16 @@
     margin: 0;
 }
 
-.form-group-element {
+.mb2 {
     margin-bottom: 2px;
 }
 
 .post-table-col {
     width: 100px;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 .edit-post-input {
@@ -21,14 +25,11 @@
     width: 120px;
 }
 
-.search-input {
-    color: rgb(200, 200, 200);
-    background: transparent;
-    border-color: darkseagreen;
-}
-
-.search-box {
-    padding: 10px;
+.search-fields {
+    color: #93a8a8 !important;
+    background-color:transparent !important;
+    box-shadow:none !important;
+    border-color: #93a8a8;
 }
 
 .center-text {

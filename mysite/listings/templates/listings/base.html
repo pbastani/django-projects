@@ -109,13 +109,14 @@
                     <div class="widget stay-on-collapse" id="widget-sidebar">
 
                         <span class="widget-heading">Search</span>
-                        <div class="search-box">
+                        <div class="p10">
                             <form role="form" method="post" action="/listings/search/">
                                 {% csrf_token %}
                                 <div class="input-icon right">
                                     <i class="fa fa-fw fa-search"></i>
-                                    {{ form.search_string|addcss:"form-control search-input" }}
+                                    <input type="text" name="{{ form.search_string.name }}" value="{{ search_string }}" class="form-control search-fields mb2" autocomplete="off">
                                 </div>
+                                {{ form.category|addcss:"form-control search-fields" }}
                                 <button type="submit" class="btn btn-primary-alt btn-block hidden">Search</button>
                             </form>
                         </div>
