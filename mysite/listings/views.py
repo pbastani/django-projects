@@ -12,7 +12,8 @@ from .forms import \
     SigninForm, \
     EditPostForm, \
     SearchForm, \
-    UploadPhotosForm
+    UploadPhotosForm, \
+    PublishPostForm
 
 from listings.models import Profile, Post, Tag, Picture
 
@@ -202,18 +203,40 @@ def edit_post(request, post_id=0):
                    'post_tags': post_tags,
                    'errors': errors,
                    'me': me,
-                   'page_title': "Add Post"}
+                   'page_title': 'Add Post'}
         return render(request, 'listings/admin/edit_post.html', context)
 
 
 @login_required()
-def publish_post(request, post_id=0):
+def view_my_post(request, post_id=0):
     post_id = int(post_id)
-    post = Post.objects.get(id=post_id) if post_id > 0 else []
-    context = {
-        'post': post
-    }
-    return render(request, 'listings/admin/publish_post.html', context)
+    post = Post.objects.get(id=post_id)
+    context = {'post': post}
+    return render(request, 'listings/admin/view_my_post.html', context)
+
+
+@login_required()
+def publish_post(request, post_id=0):
+
+    if request.method == 'POST':
+        form = PublishPostForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            post_id = data['id']
+            post = Post.objects.get(id=post_id)
+            post.create_date = data['create_date']
+            post.expiry_date = data['expiry_date']
+            post.save()
+            return HttpResponseRedirect('/listings/myposts/view/')
+    else:
+        post_id = int(post_id)
+        post = Post.objects.get(id=post_id)
+        form = PublishPostForm()
+        context = {
+            'post': post,
+            'form': form
+        }
+        return render(request, 'listings/admin/publish_post.html', context)
 
 
 @login_required()
@@ -326,7 +349,7 @@ def signin(request):
                         login(request, me)
                         me.profile.last_online = datetime.datetime.today()
                         me.save()
-                        return HttpResponseRedirect('/listings/')
+                        return HttpResponseRedirect('/listings/dashboard/')
                     else:
                         errors.append('Your account is disabled.')
                 else:

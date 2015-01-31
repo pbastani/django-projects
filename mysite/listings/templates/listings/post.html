@@ -28,7 +28,7 @@
                     <div class="panel-body">
                         {{ post.content }}
 
-                        <div class="mt10">
+                        <div class="mt10 mb10">
                             {% if post.pictures.all.count > 0 %}
                                 {% for picture in post.pictures.all %}
                                     {% thumbnail picture.file "1000" as big %}
@@ -41,28 +41,28 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="panel-footer p10">
-                        <div class="row pl10">
-                            <div class="pr20 pull-left">
-                                <i class="fa fa-dollar"></i> {{ post.price }}
-                            </div>
-                            <div class="pr20 pull-left">
-                                <i class="fa fa-calendar"></i>
-                                {{ post.create_date|date:"M. d, Y" }}
-                            </div>
-                            <div class="pr20 pull-left">
-                                <i class="fa fa-map-marker"></i>
-                                <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
-                            </div>
-                        </div>
-                        <div class="row pl5">
-                            <div class="pt10">
-                                {% for tag in tags %}
-                                    <a href="/listings/tag/{{ tag.split|join:'-' }}/">​​
-                                        <span class="label label-inverse"><i class="fa fa-tag"></i> {{ tag }}</span>
-                                    </a>
-                                {% endfor %}
+                        <div class="panel-footer p10">
+                            <div class="row pl10">
+                                <div class="pr20 pull-left">
+                                    <i class="fa fa-dollar"></i> {{ post.price }}
+                                </div>
+                                <div class="pr20 pull-left">
+                                    <i class="fa fa-calendar"></i>
+                                    {{ post.create_date|date:"M. d, Y" }}
+                                </div>
+                                <div class="pr20 pull-left">
+                                    <i class="fa fa-map-marker"></i>
+                                    <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
+                                </div>
+                                <div class="pr20 pull-left">
+                                    <i class="fa fa-tags"></i>
+                                    {% for tag in tags %}
+                                        <a href="/listings/tag/{{ tag.split|join:'-' }}/">​​{{ tag }}</a>
+                                        {% if forloop.revcounter > 1 %}
+                                            -
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>

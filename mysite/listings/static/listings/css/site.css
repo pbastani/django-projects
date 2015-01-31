@@ -15,14 +15,7 @@
 
 a:hover {
     text-decoration: underline;
-}
-
-.edit-post-input {
-    text-align: right;
-}
-
-.post-category-icon {
-    width: 120px;
+    /* font-style: italic; */
 }
 
 .search-fields {
@@ -73,6 +66,18 @@ ul.post-btns > li {
 .content {
     text-align: justify;
     text-justify: inter-word;
+}
+
+.date-picker {
+    width: 100px !important;
+}
+
+.date-range-form {
+    width: 400px;
+}
+
+.search-result-table {
+    background-color: white;
 }
 
 .example-image-link {

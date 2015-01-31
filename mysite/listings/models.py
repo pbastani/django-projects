@@ -23,7 +23,6 @@ class Post(models.Model):
     content = models.CharField(max_length=10000, default="")
     create_date = models.DateTimeField(default=datetime.date(2000, 1, 1))
     expiry_date = models.DateTimeField(default=datetime.date(2000, 1, 1))
-    is_active = models.BooleanField(default=False)
     views = models.IntegerField(default=0)
     location = models.CharField(max_length=50, default="")
     price = models.IntegerField(default=0)

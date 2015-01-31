@@ -18,13 +18,19 @@ class SearchForm(forms.Form):
     category = forms.ChoiceField(label="Category", choices=CATEGORIES)
 
 
+class PublishPostForm(forms.Form):
+    id = forms.IntegerField(required=False)
+    create_date = forms.DateField(required=False)
+    expiry_date = forms.DateField(required=False)
+
+
 class UploadPhotosForm(forms.Form):
     id = forms.IntegerField(required=False)
     photos = forms.FileField(label="Upload Photos", required=False)
 
 
 class EditPostForm(forms.Form):
-    id = forms.IntegerField(required=False)
+    id = forms.IntegerField(required=True)
     title = forms.CharField(label="Title", required=False)
     content = forms.CharField(label="Content", widget=forms.Textarea, required=True)
     tags = forms.CharField(label="Tags", required=False)
