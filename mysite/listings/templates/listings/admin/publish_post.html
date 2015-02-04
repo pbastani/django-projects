@@ -49,6 +49,15 @@
                                 <i class="fa fa-map-marker"></i>
                                 <a href="https://www.google.ca/maps/place/{{ post.location }}" target="_blank">{{ post.location }}</a>
                             </div>
+                            <div class="pr20 pull-left">
+                                <i class="fa fa-tags"></i>
+                                {% for tag in post.tags_text %}
+                                    <a href="/listings/tag/{{ tag.split|join:'-' }}/" target="_blank">​​{{ tag }}</a>
+                                    {% if forloop.revcounter > 1 %}
+                                        -
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>

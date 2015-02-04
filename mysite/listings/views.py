@@ -31,12 +31,11 @@ def view_post(request, post_id=0):
     if int(post_id) > 0:
         post = Post.objects.get(id=int(post_id))
 
-    tags = []
+    post.tags_text = []
     for tag in post.tags.all():
-        tags.append(tag.description)
+        post.tags_text.append(tag.description)
 
     context = {'post': post,
-               'tags': tags,
                'form': form,
                'page_title': "Rosetti Listings"}
     return render(request, 'listings/post.html', context)
@@ -106,7 +105,9 @@ def my_posts(request):
         else:
             post.is_active = True
 
+    active_posts = Post.objects.filter(expiry_date__gt=datetime.datetime.today(), user=me)
     context = {'posts': posts,
+               'num_of_posts': active_posts.count(),
                'today': datetime.datetime.today(),
                'me': me,
                'page_title': "View Post"}
@@ -124,8 +125,8 @@ def delete_post(request, post_id=0):
 
 @login_required()
 def edit_post(request, post_id=0):
-    errors = []
     me = request.user
+    errors = []
     post = Post()
 
     if request.method == 'POST':
@@ -200,6 +201,7 @@ def edit_post(request, post_id=0):
         form = EditPostForm(data)
         context = {'form': form,
                    'post': post,
+                   'num_of_posts': Post.objects.filter(user=me).count(),
                    'post_tags': post_tags,
                    'errors': errors,
                    'me': me,
@@ -209,15 +211,21 @@ def edit_post(request, post_id=0):
 
 @login_required()
 def view_my_post(request, post_id=0):
+    me = request.user
     post_id = int(post_id)
     post = Post.objects.get(id=post_id)
-    context = {'post': post}
+    post.tags_text = []
+    for tag in post.tags.all():
+        post.tags_text.append(tag.description)
+
+    context = {'post': post,
+               'num_of_posts': Post.objects.filter(user=me).count()}
     return render(request, 'listings/admin/view_my_post.html', context)
 
 
 @login_required()
 def publish_post(request, post_id=0):
-
+    me = request.user
     if request.method == 'POST':
         form = PublishPostForm(request.POST)
         if form.is_valid():
@@ -231,16 +239,21 @@ def publish_post(request, post_id=0):
     else:
         post_id = int(post_id)
         post = Post.objects.get(id=post_id)
+        post.tags_text = []
+        for tag in post.tags.all():
+            post.tags_text.append(tag.description)
+
         form = PublishPostForm()
         context = {
             'post': post,
-            'form': form
-        }
+            'form': form,
+            'num_of_posts': Post.objects.filter(user=me).count()}
         return render(request, 'listings/admin/publish_post.html', context)
 
 
 @login_required()
 def upload_photos(request, post_id=0):
+    me = request.user
     post_id = int(post_id)
     post = Post.objects.get(id=post_id) if post_id > 0 else []
     pictures = post.pictures if post else []
@@ -266,7 +279,8 @@ def upload_photos(request, post_id=0):
     context = {'post_id': post_id,
                'pictures': pictures.all(),
                'form': form,
-               'page_title': 'Upload Photos'}
+               'page_title': 'Upload Photos',
+               'num_of_posts': Post.objects.filter(user=me).count()}
     return render(request, 'listings/admin/upload_photos.html', context)
 
 
@@ -281,7 +295,8 @@ def home(request):
 @login_required()
 def dashboard(request):
     me = request.user
-    context = {'me': me}
+    context = {'me': me,
+               'num_of_posts': Post.objects.filter(user=me).count()}
     return render(request, 'listings/admin/index.html', context)
 
 
